@@ -14,9 +14,9 @@ import time
 #   para saber a sua porta, execute no terminal :
 #   python -m serial.tools.list_ports
 
-serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
+#serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
-#serialName = "COM3"                  # Windows(variacao de)
+serialName = "COM3"                  # Windows(variacao de)
 
 def main():
     # Inicializa enlace
@@ -25,12 +25,12 @@ def main():
     # Ativa comunicacao
     com.enable()
 
-    # Endereco da imagem a ser transmitida
-    imageR = "./imgs/imageC.png"
+    # Array a ser transmitido   
 
-    # Endereco da imagem a ser salva
-    imageW = "./imgs/recebida.png"
-
+    data = range(0,256)
+    print(data)
+    dataBytes = bytes(data)    
+    print(dataBytes)
     # Log
     print("-------------------------")
     print("Comunicação inicializada")
@@ -39,9 +39,9 @@ def main():
 
     # Carrega imagem
     print ("Carregando imagem para transmissão :")
-    print (" - {}".format(imageR))
+    print (" - {}".format(dataBytes))
     print("-------------------------")
-    txBuffer = open(imageR, 'rb').read()
+    txBuffer = dataBytes
     txLen    = len(txBuffer)
     print(txLen)
 
@@ -67,8 +67,8 @@ def main():
     # Salva imagem recebida em arquivo
     print("-------------------------")
     print ("Salvando dados no arquivo :")
-    print (" - {}".format(imageW))
-    f = open(imageW, 'wb')
+    print (" - {}".format(dataBytes))
+    f = open(dataBytes)
     f.write(rxBuffer)
 
     # Fecha arquivo de imagem

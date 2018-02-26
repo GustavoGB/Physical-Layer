@@ -11,7 +11,7 @@
 import time
 
 # Construct Struct
-from construct import *
+#from construct import *
 
 # Interface Física
 from interfaceFisica import fisica
