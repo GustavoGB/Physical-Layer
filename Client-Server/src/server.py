@@ -14,7 +14,7 @@ import time
 #   para saber a sua porta, execute no terminal :
 #   python -m serial.tools.list_ports
 
-serialName = "COM4"                   # Ubuntu (variacao de)
+serialName = "COM6"                   # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
 #serialName = "COM3"                  # Windows(variacao de)
 
@@ -36,12 +36,8 @@ def main():
 
     # Faz a recepção dos dados
     print ("Recebendo dados .... ")
-    #txBuffer = open(imageR, 'rb').read()
-    txLen = 19716
-
     rxBuffer, nRx = com.getData(1)
     start = time.time()
-    rxBuffer, nRx = com.getData(txLen-1)
 
     # log
     end = time.time()

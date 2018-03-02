@@ -97,10 +97,14 @@ class RX(object):
 
         This function blocks until the number of bytes is received
         """
-        while(self.getBufferLen() < size):
-            time.sleep(0.05)
+        self.clearBuffer()
 
-        return(self.getBuffer(size))
+        grandeza = 0 # Tamanho inicial da recepção 
+
+        while(self.getBufferLen() > grandeza or self.getBufferLen()==0 ):
+            grandeza = self.getBufferLen()
+            time.sleep(2.0)
+        return(self.getBuffer(grandeza))
 
 
     def clearBuffer(self):
