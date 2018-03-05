@@ -17,9 +17,10 @@ class Packing():
 
     def headBuild(self,dataLen): 
         header = self.headStruct.build(dict(
-            start = self.headSTART
+            start = self.headSTART,
             size = dataLen))
-            return(header)
+    
+        return(header)
 
     def eopBuild(self):
         eop = "d1eeb02f2d34d1aa8ecb7b3ed35cd090"
@@ -27,7 +28,7 @@ class Packing():
         return binascii.hexlify(eopOfficial)
 
     def dataPackBuild(self,data):
-        header = self.headBuild(len(data),0x00)) # This line defines that the header contains the range of the payload and the inicial data is set to 0.
+        header = self.headBuild(len(data),0x00)  # This line defines that the header contains the range of the payload and the inicial data is set to 0.
         packet = header
 
         packet += data
