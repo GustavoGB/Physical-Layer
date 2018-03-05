@@ -34,4 +34,18 @@ class Packing():
         packet += self.eopBuild()
         
         return(packet)
+
+    def transf_binary(self, y):
+        return format(y,'b').zfill(16) #hexadecimal format
+
+    def unbuildPack (self,packet):
         
+        header = packet[0:6]
+        len_payload = header[1:4]
+        size_payload = int.from_bytes(len_payload, byteorder = 'big')
+        payLoad = packet[len(header):]
+
+        if size_payload == 0 : 
+            return header 
+        else :
+            return payLoad        
