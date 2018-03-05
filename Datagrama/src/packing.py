@@ -27,4 +27,11 @@ class Packing():
         return binascii.hexlify(eopOfficial)
 
     def dataPackBuild(self,data):
+        header = self.headBuild(len(data),0x00)) # This line defines that the header contains the range of the payload and the inicial data is set to 0.
+        packet = header
+
+        packet += data
+        packet += self.eopBuild()
+        
+        return(packet)
         
