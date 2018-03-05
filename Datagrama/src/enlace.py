@@ -9,9 +9,9 @@
 
 # Importa pacote de tempo
 import time
-
+import packing
 # Construct Struct
-#from construct import *
+from construct import *
 
 # Interface Física
 from interfaceFisica import fisica
@@ -19,6 +19,8 @@ from interfaceFisica import fisica
 # enlace Tx e Rx
 from enlaceRx import RX
 from enlaceTx import TX
+
+import math
 
 class enlace(object):
     """ This class implements methods to the interface between Enlace and Application
@@ -31,6 +33,7 @@ class enlace(object):
         self.rx          = RX(self.fisica)
         self.tx          = TX(self.fisica)
         self.connected   = False
+        self.End = packing.Packing()
 
     def enable(self):
         """ Enable reception and transmission
@@ -55,9 +58,15 @@ class enlace(object):
         """
         self.tx.sendBuffer(data)
 
-    def getData(self, size):
+    def getData(self):
         """ Get n data over the enlace interface
         Return the byte array and the size of the buffer
         """
-        data = self.rx.getNData(size)
-        return(data, len(data))
+        package_payload = self.rx.packageSearch()
+        data = self.End.unbuildPack(package_payload)
+        
+        return(data)
+
+
+        if (self.rx.getBufferLen())!= 0:
+            packet = self.getData()

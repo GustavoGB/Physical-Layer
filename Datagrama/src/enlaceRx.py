@@ -28,6 +28,7 @@ class RX(object):
         self.threadStop  = False
         self.threadMutex = True
         self.READLEN     = 1024
+        self.found       = False
 
     def thread(self):
         """ RX thread, to send data in parallel with the code
@@ -117,8 +118,6 @@ class RX(object):
     def packageSearch(self): 
         End = packing.Packing()
         Eop = End.eopBuild()
-
-
          search = self.buffer.find(Eop)
 
         # Flag para encontrar o pacote e seu eop
@@ -127,10 +126,10 @@ class RX(object):
              #print(search)
              self.found = True
              #print("It's there")
-            package = self.buffer[:search] # Configure the package
+            packet = self.buffer[:search] # Configure the packet
             self.buffer = self.buffer[search+len(Eop):]
             self.threadResume()
-            return package
+            return packet
         else:
             #print("Idk")
             self.found = False  
