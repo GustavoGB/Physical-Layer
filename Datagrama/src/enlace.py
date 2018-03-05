@@ -1,12 +1,19 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+#####################################################
+# Camada Física da Computação
+# Prof. Rafael Corsi
+#  Abril/2017
+#  Camada de Enlace
+####################################################
 
-#REALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
 # Importa pacote de tempo
 import time
 
 # Construct Struct
-from construct import *
+#from construct import *
 
-# Interface física
+# Interface Física
 from interfaceFisica import fisica
 
 # enlace Tx e Rx
@@ -40,74 +47,17 @@ class enlace(object):
         time.sleep(1)
         self.fisica.close()
 
-
+    ################################
+    # Application  interface       #
+    ################################
     def sendData(self, data):
         """ Send data over the enlace interface
         """
-        
-        #Construção do Head
+        self.tx.sendBuffer(data)
 
-        self.StructEop()
-        self.StructHead()
-       
-        
-        #Encapuslamento do arquivo--> ENVIO
-        pack = self.buildDataPacket(data)
-        
-        #Construção do EOP
-  
-
-        self.tx.sendBuffer(pack)
-        
-    def getData(self):
+    def getData(self, size):
         """ Get n data over the enlace interface
         Return the byte array and the size of the buffer
         """
-        data, size = self.rx.UnbuildPack()
-
-        return(data,len(data),size)
-
-
-    #Estrutura Head
-    def StructHead(self):
-        self.headStart = 0xAA
-        self.headStruct = Struct("start"/ Int16ub, "size"/ Int16ub)
-
-    #Implementa o Head
-    def buildHead(self, datalen):
-
-        head = self.headStruct.build(dict(start = self.headStart, size = datalen))
-
-        return head
-
-    #Estrutura EOP
-    def StructEop(self):
-
-        self.endStart = 0xFF
-        self.endStruct = Struct("g1"/Int8ub, "g2"/Int8ub, "g3"/Int8ub,"g4"/Int8ub)
-
-
-    #Implementa o EOP
-
-    def buildEop(self):
-
-        end = self.endStruct.build(dict(g1 = 0x21, g2 = 0x42, g3 = 0x63,g4 = 0x04))
-
-        return end
-
-
-    def buildDataPacket(self, data):
-
-
-        #Gerar Head
-
-        pack = self.buildHead(len(data))
-
-        print(len(data)) # Printar o tamanho do arquivo (payload)
-
-        
-        #Concatenação do Header, payload e EOP
-        pack += data
-        pack += self.buildEop()
-        
-        return pack
+        data = self.rx.getNData(size)
+        return(data, len(data))
