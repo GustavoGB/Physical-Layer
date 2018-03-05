@@ -9,6 +9,7 @@
 
 # Importa pacote de tempo
 import time
+import packing
 
 # Threads
 import threading
@@ -113,3 +114,23 @@ class RX(object):
         self.buffer = b""
 
 
+    def packageSearch(self): 
+        End = packing.Packing()
+        Eop = End.eopBuild()
+
+
+         search = self.buffer.find(Eop)
+
+        # Flag para encontrar o pacote e seu eop
+         if (search != -1):
+             self.threadPause()
+             #print(search)
+             self.found = True
+             #print("It's there")
+            package = self.buffer[:search] # Configure the package
+            self.buffer = self.buffer[search+len(Eop):]
+            self.threadResume()
+            return package
+        else:
+            #print("Idk")
+            self.found = False  
