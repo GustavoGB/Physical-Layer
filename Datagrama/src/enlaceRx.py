@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #####################################################
 # Camada Física da Computação
@@ -12,6 +12,7 @@ import time
 
 # Threads
 import threading
+import binascii
 
 # Class
 class RX(object):
@@ -27,6 +28,7 @@ class RX(object):
         self.threadStop  = False
         self.threadMutex = True
         self.READLEN     = 1024
+        self.packetFound = False
 
     def thread(self):
         """ RX thread, to send data in parallel with the code
@@ -37,6 +39,7 @@ class RX(object):
                 if (nRx > 0):
                     self.buffer += rxTemp
                 time.sleep(0.001)
+
 
     def threadStart(self):
         """ Starts RX thread (generate and run)
@@ -109,3 +112,22 @@ class RX(object):
         self.buffer = b""
 
 
+    def UnbuildPack(self):
+        """ Desencapsula os dados do pacote, retornando datalen e payload
+        """
+        while(self.packetFound == False):
+
+            eop = self.buffer.find(b'\x21\x42\x63\x04') #Procura sequência do EOP
+            
+            if eop != -1: #EOP existe
+                
+                packetHead = self.buffer.find(b'\x00\xAA') #Procura pelo HEADER
+                
+                head_concatenado_Payload = self.buffer[:eop] #Começo até EOP (Não inclui EOP)
+                
+                size = int(binascii.hexlify(head_concatenado_Payload[2:4]), 16) #Posição 2 até 4 (Não inclui 4)
+                                                                     
+                payload = head_concatenado_Payload[4:] #A partir do 4
+                self.packetFound = True
+
+                return(payload, size)

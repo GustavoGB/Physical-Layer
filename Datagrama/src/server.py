@@ -14,9 +14,9 @@ import time
 #   para saber a sua porta, execute no terminal :
 #   python -m serial.tools.list_ports
 
-#serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
+serialName = "COM3"                   # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
-serialName = "COM6"                  # Windows(variacao de)
+#serialName = "COM3"                  # Windows(variacao de)
 
 def main():
     # Inicializa enlace
@@ -25,51 +25,40 @@ def main():
     # Ativa comunicacao
     com.enable()
 
-    # Array a ser transmitido   
+    # Endereco da imagem a ser salva
+    imageW = "./imgs/recebida.png"
 
-    data = range(0,256)
-    print(data)
-    dataBytes = bytes(data)    
-    print(dataBytes)
     # Log
     print("-------------------------")
     print("Comunicação inicializada")
     print("  porta : {}".format(com.fisica.name))
     print("-------------------------")
 
-    # Carrega imagem
-    print ("Carregando imagem para transmissão :")
-    print (" - {}".format(dataBytes))
-    print("-------------------------")
-    txBuffer = dataBytes
-    txLen    = len(txBuffer)
-    print(txLen)
-
-    # Transmite imagem
-    print("Transmitindo .... {} bytes".format(txLen))
-    com.sendData(txBuffer)
-
-    # espera o fim da transmissão
-    while(com.tx.getIsBussy()):
-        pass
-
-    # Atualiza dados da transmissão
-    txSize = com.tx.getStatus()
-    print ("Transmitido       {} bytes ".format(txSize))
-
     # Faz a recepção dos dados
     print ("Recebendo dados .... ")
-    rxBuffer, nRx = com.getData(txLen)
+    #txBuffer = open(imageR, 'rb').read()
+    #txLen = 19716
+
+    tempBuffer, nRx, size = com.getData()
+
+
+
+
+    #rxBuffer, nRx = com.getData(1)
+    start = time.time()
+    #rxBuffer, nRx = com.getData(txLen-1)
 
     # log
+    end = time.time()
+
     print ("Lido              {} bytes ".format(nRx))
 
     # Salva imagem recebida em arquivo
     print("-------------------------")
     print ("Salvando dados no arquivo :")
-    print (" - {}".format(dataBytes))
-    f = open(dataBytes)
-    f.write(rxBuffer)
+    print (" - {}".format(imageW))
+    f = open(imageW, 'wb')
+    f.write(tempBuffer)
 
     # Fecha arquivo de imagem
     f.close()
@@ -78,6 +67,10 @@ def main():
     print("-------------------------")
     print("Comunicação encerrada")
     print("-------------------------")
+    tempo = end - start
+    print('Tempo de transmissão:', "{0:.2f}".format(tempo), 'seg')
+
+
     com.disable()
 
 if __name__ == "__main__":

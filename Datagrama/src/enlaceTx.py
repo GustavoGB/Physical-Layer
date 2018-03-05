@@ -87,3 +87,48 @@ class TX(object):
         """
         return(self.threadMutex)
 
+
+
+class foxCom(object):
+    """ This class implements methods to the interface between Enlace and Application
+    """
+
+    def __init__(self, name):
+        """ Initializes the foxCom class
+        """
+        self.fisica      = fisica(name)
+        self.rx          = RX(self.fisica)
+        self.tx          = TX(self.fisica)
+        self.connected   = False
+
+    def enable(self):
+        """ Enable reception and transmission
+        """
+        self.fisica.open()
+        self.fisica.flush()
+        self.rx.threadStart()
+        self.tx.threadStart()
+
+    def disable(self):
+        """ Disable reception and transmission 
+        """
+        self.rx.threadKill()
+        self.tx.threadKill()
+        time.sleep(1)
+        self.fisica.close()
+
+    ################################
+    # Application  interface       #
+    ################################
+    def sendData(self, data):
+        """ Send data over the enlace interface
+        """
+        self.tx.sendBuffer(data)
+
+    def getData(self, size):
+        """ Get n data over the enlace interface
+
+        Return the byte array and the size of the buffer
+        """
+        data = self.rx.getNData(size)
+        return(data, len(data))
