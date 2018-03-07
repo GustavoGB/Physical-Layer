@@ -118,14 +118,15 @@ class RX(object):
     def packageSearch(self): 
         End = packing.Packing()
         Eop = End.eopBuild()
-         search = self.buffer.find(Eop)
-
+        
+        search = self.buffer.find(Eop)
+        
         # Flag para encontrar o pacote e seu eop
-         if (search != -1):
-             self.threadPause()
-             #print(search)
-             self.found = True
-             #print("It's there")
+        if (search != -1):
+            self.threadPause()
+            #print(search)
+            self.found = True
+            #print("It's there")
             packet = self.buffer[:search] # Configure the packet
             self.buffer = self.buffer[search+len(Eop):]
             self.threadResume()

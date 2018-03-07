@@ -4,8 +4,7 @@ import time
 # Serial Com Port
 #   para saber a sua porta, execute no terminal :
 #   python -m serial.tools.list_ports
-
-serialName = "COM6"           # Ubuntu (variacao de)
+serialName = "COM3"           # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
 #serialName = "COM3"                  # Windows(variacao de)
 
@@ -17,7 +16,7 @@ def main():
     com.enable()
 
     # Endereco da imagem a ser transmitida
-    imageR = "./imgs/imageA.png"
+    imageR = "./imgs/panda.jpg"
 
     # Endereco da imagem a ser salva
     #SERVER--imageW = "./imgs/recebida.png"
