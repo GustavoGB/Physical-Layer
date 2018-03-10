@@ -62,11 +62,17 @@ class enlace(object):
         """ Get n data over the enlace interface
         Return the byte array and the size of the buffer
         """
-        package_payload = self.rx.packageSearch()
-        data = self.End.unbuildPack(package_payload)
+ 
+        print('entrou na tentativa de ler')   
+        print('tamanho do buffer no enlac {}'  .format(self.rx.getBufferLen()))
+        data = self.rx.getNData(1)
         
-        return(data)
+       
+        #package_payload = self.rx.packageSearch()
+        #data = self.End.unbuildPack(package_payload)
+        
+      
+        
+        return(data, len(data))
 
-
-        if (self.rx.getBufferLen())!= 0:
-            packet = self.getData()
+            

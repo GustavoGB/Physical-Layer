@@ -99,12 +99,14 @@ class RX(object):
 
         This function blocks until the number of bytes is received
         """
-        self.clearBuffer()
+        #self.clearBuffer()
 
         grandeza = 0 # Tamanho inicial da recepção 
 
         while(self.getBufferLen() > grandeza or self.getBufferLen()==0 ):
             grandeza = self.getBufferLen()
+            print('tamanho dos dados'  .format(grandeza))
+                        
             time.sleep(2.0)
         return(self.getBuffer(grandeza))
 
@@ -130,6 +132,7 @@ class RX(object):
             packet = self.buffer[:search] # Configure the packet
             self.buffer = self.buffer[search+len(Eop):]
             self.threadResume()
+            print('packet achado na procura do recebimento {}' .format(packet))
             return packet
         else:
             #print("Idk")

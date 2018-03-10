@@ -9,16 +9,12 @@
 
 from enlace import *
 import time
-from enlaceRx import RX
-from enlaceTx import TX
-import enlace
-import enlaceRx
-import enlaceTx
+
 # Serial Com Port
 #   para saber a sua porta, execute no terminal :
 #   python -m serial.tools.list_ports
 
-serialName = "COM4"                   # Ubuntu (variacao de)
+serialName = "COM3"                   # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
 #serialName = "COM3"                  # Windows(variacao de)
 
@@ -40,7 +36,7 @@ def main():
 
     # Faz a recepção dos dados
     print ("Recebendo dados .... ")
-    rxBuffer, nRx = com.getData(1)
+    rxBuffer, nRx = com.getData()
     start = time.time()
 
     # log
