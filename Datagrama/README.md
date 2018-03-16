@@ -20,11 +20,13 @@ client.py : Código que transmite a imagem e aguarda o fim da transmissão.
 
 enlace.py : Interface de comunicação entre a aplicação e o enlace.
 
-enlaceTx.py : Parte do enlace responsável por encapsular os dados em um pacote.
+enlaceTx.py : Parte do enlace responsável por transmitir.
 
-enlaceRx.py : Parte do enlace responsável por receber e desencapsular os dados.
+enlaceRx.py : Parte do enlace responsável por receber os dados.
 
 interfaceFisica.py : Código que lida com o envio dos dados para o Arduino e recebimento.
+
+packing.py : código responsável por encapsular e desencapsular os dados. 
 
 
 ### Informações do Header e End Of Package
