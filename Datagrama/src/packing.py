@@ -13,20 +13,19 @@ class Packing():
 
     def __init__(self):
         self.headSTART = 0xAF
-        self.headStruct = Struct("start"  /Int8ub,
-                                "size " / Int16ub)
-        
-        
+        self.head      = self.HeadStruct()    
+        self.headLen   = self.head.sizeof()
+      
         
     def HeadStruct(self): 
-        head = Struct (
+        head = Struct(
         "start" / Int8ub,
         "size" / Int16ub)
         return(head)
                 
-    def headBuild(self, dataLen): 
-        header = self.headStruct.build(dict(start = self.headSTART, size = dataLen))
-        return (header)                        
+    def headBuild(self,dataLen): 
+        header = self.head.build(dict(start = self.headSTART, size = dataLen))
+        return (header)                     
                 
             
     def eopBuild(self):
@@ -41,7 +40,6 @@ class Packing():
         bigPack += data
         bigPack += self.eopBuild()              
         return(bigPack)
-        print(bigPack)
         
     def transf_binary(self, y):
         return format(y,'b').zfill(16) #hexadecimal format

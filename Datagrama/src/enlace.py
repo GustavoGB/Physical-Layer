@@ -12,6 +12,7 @@ import time
 import packing
 # Construct Struct
 from construct import *
+import binascii
 
 # Interface Física
 from interfaceFisica import fisica
@@ -63,17 +64,12 @@ class enlace(object):
         #print("print do head contruido pela classe {}" .format(head2))
         ###
         lastHead = self.End.headBuild(len(data))
-        print("vai construir o Head{}".format(lastHead))
+        print("vai construir o Head {}".format(lastHead))
 
-        lastEop = self.End.headBuild()  
-        print("vai construir o End of Paclage{}".format(lastEop))
-        packet = self.End.dataPackBuild() # Usa a função do packing para construir o pacote
-
-        completePacket = lastHead + packet + lastEop
-
-        print(completePacket)
-
-        completePacket = data
+        lastEop = self.End.eopBuild()  
+        print("vai construir o Eop {}".format(lastEop))
+        packet = self.End.dataPackBuild(data) # Usa a função do packing para construir o pacote
+        packet = data
         
         self.tx.sendBuffer(data)
     def getData(self):
@@ -86,8 +82,8 @@ class enlace(object):
         
         
 
-        package_payload = self.rx.packageSearch()
-        data = self.End.unbuildPack(package_payload)
+       # package_payload = self.rx.packageSearch()
+       # data = self.End.unbuildPack(package_payload)
         data = self.rx.getNData(1)
         return(data, len(data))
 
