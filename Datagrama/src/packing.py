@@ -8,23 +8,34 @@ from enlaceRx import RX
 
 class Packing():
 
-
-
+    class HandShake():
+        
+        def __init__(self):
+            
+            self.Syn = 0xAA
+            self.Ack = 0xAB
+            self.Nack = 0xAC
+    
 
     def __init__(self):
         self.headSTART = 0xAF
         self.head      = self.HeadStruct()    
         self.headLen   = self.head.sizeof()
+        self.typeHead  = self.HandShake()
       
         
     def HeadStruct(self): 
         head = Struct(
         "start" / Int8ub,
-        "size" / Int16ub)
+        "size" / Int16ub,
+        "type" / Int8ub)
         return(head)
                 
-    def headBuild(self,dataLen): 
-        header = self.head.build(dict(start = self.headSTART, size = dataLen))
+    def headBuild(self,dataLen, self.type): 
+        header = self.head.build(dict
+        (start = self.headSTART,
+         size = dataLen,
+         type = self.type)
         return (header)                     
                 
             
@@ -56,4 +67,22 @@ class Packing():
        if size_payload == 0 : 
            return header 
        else :
-           return payLoad           
+           return payLoad      
+           
+           
+    def synPack(self):
+        pSyn += self.headBuild(0,self.HandShake.Syn)
+        pSyn += self.eopBuild()
+        return pSyn
+           
+    def ackPack(self):
+        pAck += self.headBuild(0,self.HandShake.Ack)
+        pAck += self.eopBuild()
+        return pAck
+        
+    def nackPack(self):
+        pNack += self.headBuild(0,self.HandShake.Nack)
+        pNack += self.eopBuild()
+        return pNack
+        
+        

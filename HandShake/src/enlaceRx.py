@@ -13,6 +13,7 @@ import packing
 
 # Threads
 import threading
+import codecs
 
 # Class
 class RX(object):
@@ -106,7 +107,6 @@ class RX(object):
         while(self.getBufferLen() > grandeza or self.getBufferLen()==0 ):
             grandeza = self.getBufferLen()
             print('tamanho dos dados'  .format(grandeza))
-                        
             time.sleep(2.0)
         return(self.getBuffer(grandeza))
 
@@ -117,18 +117,16 @@ class RX(object):
         self.buffer = b""
 
 
-    def packageSearch(self): 
+    """def packageSearch(self): 
         End = packing.Packing()
         Eop = End.eopBuild()
-        
         search = self.buffer.find(Eop)
-        
         # Flag para encontrar o pacote e seu eop
         if (search != -1):
             self.threadPause()
-            #print(search)
+            print(search)
             self.found = True
-            #print("It's there")
+            print("It's there")
             packet = self.buffer[:search] # Configure the packet
             self.buffer = self.buffer[search+len(Eop):]
             self.threadResume()
@@ -136,4 +134,4 @@ class RX(object):
             return packet
         else:
             #print("Idk")
-            self.found = False  
+            self.found = False  """

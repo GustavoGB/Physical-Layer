@@ -1,6 +1,7 @@
 from enlace import *
 import time
 
+
 # Serial Com Port
 #   para saber a sua porta, execute no terminal :
 #   python -m serial.tools.list_ports
@@ -34,7 +35,7 @@ def main():
     print ("Carregando imagem para transmissão :")
     print (" - {}".format(imageR))
     print("-------------------------")
-    txBuffer = bytes([1,2]) #open(imageR, 'rb').read()
+    txBuffer = open(imageR, 'rb').read()
     txLen    = len(txBuffer)
     print(txLen)
 
