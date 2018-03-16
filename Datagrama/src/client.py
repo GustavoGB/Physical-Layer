@@ -13,6 +13,7 @@ def main():
     # Inicializa enlace
     com = enlace(serialName)
 #   com2 = enlace(serialName2)
+    
 
     # Ativa comunicacao
     com.enable()
@@ -33,7 +34,7 @@ def main():
     print ("Carregando imagem para transmissão :")
     print (" - {}".format(imageR))
     print("-------------------------")
-    txBuffer = open(imageR, 'rb').read()
+    txBuffer = bytes([1,2]) #open(imageR, 'rb').read()
     txLen    = len(txBuffer)
     print(txLen)
 
@@ -80,7 +81,7 @@ def main():
     print("-------------------------")
     print("Tempo de transmissão:","{0:.2f}".format(tempo),"segundos")
     com.disable()
-    com2.disable()
+
 
 if __name__ == "__main__":
     main()

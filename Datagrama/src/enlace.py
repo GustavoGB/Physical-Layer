@@ -33,7 +33,7 @@ class enlace(object):
         self.rx          = RX(self.fisica)
         self.tx          = TX(self.fisica)
         self.connected   = False
-        self.End = packing.Packing()
+        self.End         = packing.Packing()
 
     def enable(self):
         """ Enable reception and transmission
@@ -56,23 +56,37 @@ class enlace(object):
     def sendData(self, data):
         """ Send data over the enlace interface
         """
-        self.tx.sendBuffer(data)
+        #print("vai contruir o head")
+        #head2 = self.End.head(len(data))     
+        #print("print do head contruido pela classe {}" .format(head2))
+        
+        lastHead = self.End.headStruct(len(data))
+        print("vai construir o Head{}".format(lastHead))
 
+        lastEop = self.End.eop()  
+        print("vai construir o End of Paclage{}".format(lastEop))
+        packet = self.End.dataPackBuild() # Usa a função do packing para construir o pacote
+
+        completePacket = lastHead + packet + lastEop
+
+        print(completePacket)
+
+        completePacket = data
+        
+        self.tx.sendBuffer(data)
+        
     def getData(self):
-        """ Get n data over the enlace interface
-        Return the byte array and the size of the buffer
-        """
- 
+        # Get n data over the enlace interface
+        #Return the byte array and the size of the buffer
+        
+        
         print('entrou na tentativa de ler')   
         print('tamanho do buffer no enlac {}'  .format(self.rx.getBufferLen()))
+        
         data = self.rx.getNData(1)
-        
-       
-        #package_payload = self.rx.packageSearch()
-        #data = self.End.unbuildPack(package_payload)
-        
-      
-        
+
+       # package_payload = self.rx.packageSearch()
+       # data = self.End.unbuildPack(package_payload)
         return(data, len(data))
 
             
