@@ -7,17 +7,21 @@ import time
 
 class Packing():
 
+    class HandShake():
 
-
+        def __init__(self):
+            self.SYN = 0xAA
+            self.ACK = 0xAB
+            self.NACK = 0xAC
 
     def __init__(self):
         self.headSTART = 0xAF
         self.headStruct = Struct("start"  /Int16ub,
-                                "size " / Int8ub)
-        self.eop = "d1eeb02f2d34d1aa8ecb7b3ed35cd090"
-                                
+                                "size " / Int8ub,
+                                "type" / Int8ub)
+
+        self.typeHead = self.HandShake()                   
                             
-        
         def HeadStruct(self): 
             head = Struct (
                                 "start" / Int16ub,
@@ -26,7 +30,7 @@ class Packing():
             return(head)
             
         def headBuild(self, dataLen): 
-            header = self.headStruct.build(dict(start = self.headSTART, size = dataLen))
+            header = self.headStruct.build(dict(start = self.headSTART, size = dataLen,type = type))
             return (header)                        
             
         
