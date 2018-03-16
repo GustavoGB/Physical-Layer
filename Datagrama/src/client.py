@@ -34,7 +34,7 @@ def main():
     print ("Carregando imagem para transmissão :")
     print (" - {}".format(imageR))
     print("-------------------------")
-    txBuffer = bytes([1,2]) #open(imageR, 'rb').read()
+    txBuffer = open(imageR, 'rb').read()
     txLen    = len(txBuffer)
     print(txLen)
 
