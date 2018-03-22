@@ -1,6 +1,6 @@
 from enlace import *
 import time
-import md5 
+ 
 
 
 # Serial Com Port
@@ -20,7 +20,6 @@ def main():
 #   com2.enable()
     # Endereco da imagem a ser transmitida
     imageR = "./imgs/panda.jpg"
-
     # Endereco da imagem a ser salva
     #SERVER--imageW = "./imgs/recebida.png"
 
@@ -37,15 +36,40 @@ def main():
     txBuffer = open(imageR, 'rb').read()
     txLen    = len(txBuffer)
     print(txLen)
+    
+    txLen = 0
+    
+    while txLen == 0:
+        
+        "Tentando estabelecer 
+        "conexão com o servidor
+        "enviando Synchronize packet
+         com.sendData(packetSyn)
+         
+    
 
     # Transmite imagem
     print("Transmitindo .... {} bytes".format(txLen))
     start = time.time()
-
-    # Antes da transmissão começar, são postas as condições para cada tipo de pocotes ser entregue
-
-    if com.sendData(txBuffer) == 
     
+        
+
+    #ACK CASE
+    if (txBuffer == "82d7ba7ea655a2bbde5a4e2153a66dae"):        
+        print("Este pacote é um Ack e está sendo enviado para estabelecer conexão")
+        com.sendData(packetAck)
+    
+    #NACK CASE
+    if (txBuffer == "ab678d51f0c329ac3031dd92367959a5"):
+        print("Este pacote é um Nack e está sendo enviado para dizer que houve falhas na conexão")
+        com.sendData(packetNack)
+
+    #SYN CASE    
+    if (txBuffer == "d726760b0467b77803d6d1f3585deb6e"):
+        print("Este pacote é um Syn e está sendo enviado para iniciar a conexão")
+        com.sendData(packetSyn)
+    
+        
     
     com.sendData(txBuffer)
 
@@ -65,7 +89,7 @@ def main():
 
     print ("Lido              {} bytes ".format(nRx))
 
-    # Salva imagem recebida em arquivo
+    # Salva imagem recebida em arquivo1
     print("-------------------------")
     print ("Salvando dados no arquivo :")
     print (" - {}".format(imageW))

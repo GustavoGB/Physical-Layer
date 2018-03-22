@@ -54,20 +54,35 @@ class enlace(object):
     ################################
     # Application  interface       #
     ################################
-    def sendData(self, data):
+    def sendData(self, data,packetSyn,packetAck,packetNack):
         """ Send data over the enlace interface
         """
-        
 
         #print("vai contruir o head")
         #head2 = self.End.head(len(data))     
         #print("print do head contruido pela classe {}" .format(head2))
         ###
+        ### Construindo efetivamente ACK,NACK,SYN        
+        
+    
+        
+        packetSyn = self.End.SynBuild()
+        print("Construindo Syn{}".format(packetSyn))
+                  
+        
+        packetAck = self.End.AckBuild()
+        print("Construindo Ack{}".format(packetAck))
+        
+        packetNack = self.End.NackBuild()
+        print("Construindo Nack{}".format(packetNack))
+        
+        
         lastHead = self.End.headBuild(len(data))
         print("vai construir o Head {}".format(lastHead))
-
+   
         lastEop = self.End.eopBuild()  
         print("vai construir o Eop {}".format(lastEop))
+  
         packet = self.End.dataPackBuild(data) # Usa a função do packing para construir o pacote
         packet = data
         

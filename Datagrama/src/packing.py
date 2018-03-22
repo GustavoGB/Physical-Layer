@@ -14,7 +14,7 @@ class Packing():
         self.head      = self.HeadStruct()    
         self.headLen   = self.head.sizeof()
         self.Ack       = self.AckBuild()
-        self.Nack      = self.
+        self.Nack      = self.NackBuild()
         self.Syn       = self.SynBuild()
         
     def HeadStruct(self): 
@@ -28,7 +28,6 @@ class Packing():
         (start = self.headSTART,
         size = dataLen))
         return(header)          
-
 
     #All the values of the packts can be found just using an md5hash algorithm
 
@@ -47,9 +46,7 @@ class Packing():
         nack = "ab678d51f0c329ac3031dd92367959a5"
         nackOfficial = bytearray(nack,'ascii')
         return binascii.hexlify(nackOfficial)
-        
-        
-                
+
             
     def eopBuild(self):
         eop = "d1eeb02f2d34d1aa8ecb7b3ed35cd090"
