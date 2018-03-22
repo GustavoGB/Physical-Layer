@@ -1,5 +1,6 @@
 from enlace import *
 import time
+import md5 
 
 
 # Serial Com Port
@@ -13,9 +14,7 @@ serialName = "COM4"           # Ubuntu (variacao de)
 def main():
     # Inicializa enlace
     com = enlace(serialName)
-#   com2 = enlace(serialName2)
-    
-
+           
     # Ativa comunicacao
     com.enable()
 #   com2.enable()
@@ -42,6 +41,12 @@ def main():
     # Transmite imagem
     print("Transmitindo .... {} bytes".format(txLen))
     start = time.time()
+
+    # Antes da transmissão começar, são postas as condições para cada tipo de pocotes ser entregue
+
+    if com.sendData(txBuffer) == 
+    
+    
     com.sendData(txBuffer)
 
     # espera o fim da transmissão

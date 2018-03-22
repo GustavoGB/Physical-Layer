@@ -4,39 +4,51 @@ import binascii
 import struct
 import codecs
 import time
-from enlaceRx import RX
+
 
 class Packing():
 
-    class HandShake():
-        
-        def __init__(self):
-            
-            self.Syn = 0xAA
-            self.Ack = 0xAB
-            self.Nack = 0xAC
-    
 
     def __init__(self):
         self.headSTART = 0xAF
         self.head      = self.HeadStruct()    
         self.headLen   = self.head.sizeof()
-        self.typeHead  = self.HandShake()
-      
+        self.Ack       = self.AckBuild()
+        self.Nack      = self.
+        self.Syn       = self.SynBuild()
         
     def HeadStruct(self): 
         head = Struct(
         "start" / Int8ub,
-        "size" / Int16ub,
-        "type" / Int8ub)
+        "size" / Int16ub)
         return(head)
                 
-    def headBuild(self,dataLen, self.type): 
+    def headBuild(self,dataLen): 
         header = self.head.build(dict
         (start = self.headSTART,
-         size = dataLen,
-         type = self.type)
-        return (header)                     
+        size = dataLen))
+        return(header)          
+
+
+    #All the values of the packts can be found just using an md5hash algorithm
+
+    
+    def SynBuild(self):
+        syn = "d726760b0467b77803d6d1f3585deb6e"
+        synOfficial = bytearray(syn,'ascii')
+        return binascii.hexlify(synOfficial)
+        
+    def AckBuild(self):
+        ack = "82d7ba7ea655a2bbde5a4e2153a66dae"
+        ackOfficial = bytearray(ack,'ascii')
+        return binascii.hexlify(ackOfficial)
+        
+    def NackBuild(self):
+        nack = "ab678d51f0c329ac3031dd92367959a5"
+        nackOfficial = bytearray(nack,'ascii')
+        return binascii.hexlify(nackOfficial)
+        
+        
                 
             
     def eopBuild(self):
@@ -58,8 +70,6 @@ class Packing():
     def unbuildPack (self,packet):
         
        header = packet[0:3]
-      # print(header)
-      # header = header.sort(header)
        len_payload = header[1:3]
        size_payload = int.from_bytes(len_payload, byteorder = 'big')
        payLoad = packet[len(header):]
@@ -68,21 +78,6 @@ class Packing():
            return header 
        else :
            return payLoad      
+                                 
            
-           
-    def synPack(self):
-        pSyn += self.headBuild(0,self.HandShake.Syn)
-        pSyn += self.eopBuild()
-        return pSyn
-           
-    def ackPack(self):
-        pAck += self.headBuild(0,self.HandShake.Ack)
-        pAck += self.eopBuild()
-        return pAck
-        
-    def nackPack(self):
-        pNack += self.headBuild(0,self.HandShake.Nack)
-        pNack += self.eopBuild()
-        return pNack
-        
-        
+    
