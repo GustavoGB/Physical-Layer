@@ -65,7 +65,7 @@ class enlace(object):
         ### Construindo efetivamente ACK,NACK,SYN        
         
     
-        
+
         packetSyn = self.End.SynBuild()
         print("Construindo Syn{}".format(packetSyn))
                   
@@ -85,6 +85,7 @@ class enlace(object):
   
         packet = self.End.dataPackBuild(data) # Usa a função do packing para construir o pacote
         packet = data
+        
         
         self.tx.sendBuffer(data)
     def getData(self):

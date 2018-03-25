@@ -10,23 +10,34 @@ class Packing():
 
 
     def __init__(self):
-        self.headSTART = 0xAF
-        self.head      = self.HeadStruct()    
-        self.headLen   = self.head.sizeof()
-        self.Ack       = self.AckBuild()
-        self.Nack      = self.NackBuild()
-        self.Syn       = self.SynBuild()
+        self.headSTART       = 0xAF
+        self.head            = self.HeadStruct()    
+        self.headLen         = self.head.sizeof()
+        #HandShake
+        self.Syn.sample1       = self.SynBuild()#Send by the client to make the first step to establish comunication with the server
+        self.Syn.sample2       = self.SynBuild()#Send by the server confirming there is no problem with the comunication 
+        self.Ack.sample1       = self.AckBuild()#Send by the server after the Syn.type1 that was sent by the client to start comunication
+        self.Ack.sample2       = self.AckBuidl()#Send by the client making sure that the comunication will flow        
+        self.Nack.sample1      = self.NackBuild()#Send by the server if the comunication had some issue        
+        self.samples           = []
         
+        for i in range(i):
+            self.samples.append(self.Syn.sample1,self.Syn.sample2,self.Ack.sample1,
+                                self.Ack.sample2,self.Nack.samples1)
+            i += i 
+            print(self.samples)
     def HeadStruct(self): 
         head = Struct(
         "start" / Int8ub,
-        "size" / Int16ub)
+        "size" / Int16ub,
+        "sample" / Int8ub)
         return(head)
                 
     def headBuild(self,dataLen): 
         header = self.head.build(dict
         (start = self.headSTART,
-        size = dataLen))
+        size = dataLen
+         ))
         return(header)          
 
     #All the values of the packts can be found just using an md5hash algorithm
