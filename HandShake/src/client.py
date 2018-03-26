@@ -1,5 +1,7 @@
 from enlace import *
-import time
+import time 
+import packing
+ 
 
 
 # Serial Com Port
@@ -13,15 +15,12 @@ serialName = "COM4"           # Ubuntu (variacao de)
 def main():
     # Inicializa enlace
     com = enlace(serialName)
-#   com2 = enlace(serialName2)
-    
-
+           
     # Ativa comunicacao
     com.enable()
 #   com2.enable()
     # Endereco da imagem a ser transmitida
     imageR = "./imgs/panda.jpg"
-
     # Endereco da imagem a ser salva
     #SERVER--imageW = "./imgs/recebida.png"
 
@@ -30,7 +29,45 @@ def main():
     print("Comunicação inicializada")
     print("  porta : {}".format(com.fisica.name))
     print("-------------------------")
+#################################HANDSHAKE
+       
+    while True:
+        
+            txBuffer = 0
 
+    
+                    # Transmite imagem
+            print("Transmitindo .... {} bytes".format(txLen))
+            start = time.time()
+            
+            
+            #Primeiro Syn enviado pelo client
+                        
+                 #SYN CASE
+            txBuffer = "d726760b0467b77803d6d1f3585deb6e"         
+            if (txBuffer == "d726760b0467b77803d6d1f3585deb6e"):
+                print("Este pacote é um Syn e está sendo enviado para iniciar a conexão")
+                com.sendData(head_Syn)           
+                       
+            
+                #ACK CASE
+            if (txBuffer == "82d7ba7ea655a2bbde5a4e2153a66dae"):        
+                print("Este pacote é um Ack e está sendo enviado para estabelecer conexão")
+                com.sendData(packetAck1)
+            
+                
+                #NACK CASE
+                    
+            if (txBuffer == "ab678d51f0c329ac3031dd92367959a5"):
+                print("Este pacote é um Nack e está sendo enviado para dizer que houve falhas na conexão")
+                com.sendData(packetNack5)
+    
+                    
+        
+            
+    
+    
+    
     # Carrega imagem
     print ("Carregando imagem para transmissão :")
     print (" - {}".format(imageR))
@@ -38,10 +75,6 @@ def main():
     txBuffer = open(imageR, 'rb').read()
     txLen    = len(txBuffer)
     print(txLen)
-
-    # Transmite imagem
-    print("Transmitindo .... {} bytes".format(txLen))
-    start = time.time()
     com.sendData(txBuffer)
 
     # espera o fim da transmissão
@@ -60,7 +93,7 @@ def main():
 
     print ("Lido              {} bytes ".format(nRx))
 
-    # Salva imagem recebida em arquivo
+    # Salva imagem recebida em arquivo1
     print("-------------------------")
     print ("Salvando dados no arquivo :")
     print (" - {}".format(imageW))
