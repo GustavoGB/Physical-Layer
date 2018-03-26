@@ -10,6 +10,7 @@
 # Importa pacote de tempo
 import time
 import packing
+import enlace 
 
 # Threads
 import threading
@@ -100,10 +101,9 @@ class RX(object):
 
         This function blocks until the number of bytes is received
         """
-        #self.clearBuffer()
+        #self.clearBuffe
 
         grandeza = 0 # Tamanho inicial da recepção 
-
         while(self.getBufferLen() > grandeza or self.getBufferLen()==0 ):
             grandeza = self.getBufferLen()
             print('tamanho dos dados'  .format(grandeza))

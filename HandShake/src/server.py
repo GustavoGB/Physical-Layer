@@ -9,11 +9,11 @@
 
 from enlace import *
 import time
-
+import packing
 # Serial Com Port
 #   para saber a sua porta, execute no terminal :
 #   python -m serial.tools.list_ports
-
+import enlace 
 serialName = "COM3"                   # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
 #serialName = "COM3"                  # Windows(variacao de)
@@ -33,6 +33,28 @@ def main():
     print("Comunicação inicializada")
     print("  porta : {}".format(com.fisica.name))
     print("-------------------------")
+
+
+    while true:
+        
+        rxBuffer = 0
+        
+        
+        if (rxBuffer == "d726760b0467b77803d6d1f3585deb6e"):
+            #Confirmação do estabelecimento da conecção
+            packetSyn2 = self.End.SynBuild()   
+            print("Construindo Syn2{}".format(packetSyn2))
+            com.sendData(packetSyn)
+            
+        
+        
+        
+
+
+
+
+
+
 
     # Faz a recepção dos dados
     print ("Recebendo dados .... ")
