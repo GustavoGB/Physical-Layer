@@ -54,7 +54,7 @@ class enlace(object):
     ################################
     # Application  interface       #
     ################################
-    def sendData(self, data,packetSyn,packetAck,packetNack):
+    def sendData(self, data,head_Syn,head,packetNack):
         """ Send data over the enlace interface
         """
 
@@ -65,17 +65,32 @@ class enlace(object):
         ### Construindo efetivamente ACK,NACK,SYN        
         
     
+        #Primeiro a ser enviado pelo cliente!
+        packetSyn1 = self.End.SynBuild()  #LOGO packets[0]
+        print("Construindo Syn{}".format(packetSyn1))
+        #Confirmação do estabelecimento da conecção
+        packetSyn2 = self.End.SynBuild()   #LOGO packets[1]
+        print("Construindo Syn2{}".format(packetSyn2))
+        #Primeio a ser enviado pelo server apóis receber o pacote Syn1 do cliente          
+        packetAck3 = self.End.AckBuild()   #LOGO packets[2]
+        print("Construindo Ack1{}".format(packetAck3))
+        #Enviado pelo client quando recebe confimação através do primeiro ACK entregue pelo server
+        packetAck4 = self.End.AckBuild()    #LOGO packets[3]
+        print("Construindo Ack2{}".format(packetAck4))
+        #Enviado caso a conecção tenha problemas
+        packetNack5 = self.End.NackBuild()  #LOGO packets[4]
+        print("Construindo Nack{}".format(packetNack5))
 
-        packetSyn = self.End.SynBuild()
-        print("Construindo Syn{}".format(packetSyn))
-                  
+
+                
+        #head_Syn1 = self.End.headBuild(len(data),01)  + packetSyn1
+        #print(head_Syn1)
+        #head_Ack1 = self.End.headBuild(len(data),11)  + packetAck1 
+        #head_Syn2 = self.End.headBuild(len(data),02)  + packetSyn2 
+        #head_Ack2 = self.End.headBuild(len(data),12)  + packetSyn2
+        #head_Nack = self.End.headBuild(len(data),22)  + packetNack
         
-        packetAck = self.End.AckBuild()
-        print("Construindo Ack{}".format(packetAck))
-        
-        packetNack = self.End.NackBuild()
-        print("Construindo Nack{}".format(packetNack))
-        
+                
         
         lastHead = self.End.headBuild(len(data))
         print("vai construir o Head {}".format(lastHead))
@@ -86,9 +101,9 @@ class enlace(object):
         packet = self.End.dataPackBuild(data) # Usa a função do packing para construir o pacote
         packet = data
         
-        
         self.tx.sendBuffer(data)
-    def getData(self):
+        
+    def getData(self,type):
         # Get n data over the enlace interface
         #Return the byte array and the size of the buffer
         
