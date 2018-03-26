@@ -54,7 +54,7 @@ class enlace(object):
     ################################
     # Application  interface       #
     ################################
-    def sendData(self, data,head_Syn,head,packetNack):
+    def sendData(self, data,type):
         """ Send data over the enlace interface
         """
 
@@ -83,13 +83,16 @@ class enlace(object):
 
 
                 
-        #head_Syn1 = self.End.headBuild(len(data),01)  + packetSyn1
-        #print(head_Syn1)
-        #head_Ack1 = self.End.headBuild(len(data),11)  + packetAck1 
-        #head_Syn2 = self.End.headBuild(len(data),02)  + packetSyn2 
-        #head_Ack2 = self.End.headBuild(len(data),12)  + packetSyn2
-        #head_Nack = self.End.headBuild(len(data),22)  + packetNack
-        
+        head_Syn1 = self.End.headBuild(start,len(data),type)  + packetSyn1
+        print(head_Syn1)
+        head_Ack1 = self.End.headBuild(start,len(data),type)  + packetAck1
+        print(head_Ack1)
+        head_Syn2 = self.End.headBuild(start,len(data),type)  + packetSyn2
+        print(head_Syn2)
+        head_Ack2 = self.End.headBuild(start,len(data),type)  + packetSyn2
+        print(head_Ack2)
+        head_Nack = self.End.headBuild(start,len(data),type)  + packetNack
+        print(head_Nack)
                 
         
         lastHead = self.End.headBuild(len(data))

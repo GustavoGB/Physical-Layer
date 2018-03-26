@@ -13,7 +13,7 @@ class Packing():
         self.headSTART       = 0xAF
         self.head            = self.HeadStruct()    
         self.headLen         = self.head.sizeof()
-        self.type            = self.kind
+        self.type            = self.HeadStruct()
         
     def HeadStruct(self): 
         head = Struct(
@@ -21,11 +21,13 @@ class Packing():
         "size" / Int16ub,
         "type" / Int8ub)
         return(head)
+        
+   
                 
     def headBuild(self,dataLen,type): 
         header = self.head.build(dict
         (start = self.headSTART,
-        size   = dataLen
+        size   = dataLen,
         type   = kind
          ))
         return(header)          

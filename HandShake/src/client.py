@@ -29,25 +29,25 @@ def main():
     print("Comunicação inicializada")
     print("  porta : {}".format(com.fisica.name))
     print("-------------------------")
+  #  print("Transmitindo .... {} bytes".format(txLen))
+  #  start = time.time()
 #################################HANDSHAKE
        
     while True:
         
             txBuffer = 0
-
-    
-                    # Transmite imagem
-            print("Transmitindo .... {} bytes".format(txLen))
-            start = time.time()
             
             
             #Primeiro Syn enviado pelo client
                         
                  #SYN CASE
-            txBuffer = "d726760b0467b77803d6d1f3585deb6e"         
-            if (txBuffer == "d726760b0467b77803d6d1f3585deb6e"):
-                print("Este pacote é um Syn e está sendo enviado para iniciar a conexão")
-                com.sendData(head_Syn)           
+            def startComunication(txBuffer):                 
+            
+                 #Start SYN1 CLIENT           
+                txBuffer = "d726760b0467b77803d6d1f3585deb6e"
+                txBufferOfficial = bytearray(txBuffer,'acsii')
+                return binascii.hexlify(txBufferOfficial)
+                com.sendData(head_Syn1)           
                        
             
                 #ACK CASE

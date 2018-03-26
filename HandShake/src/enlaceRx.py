@@ -31,6 +31,7 @@ class RX(object):
         self.threadMutex = True
         self.READLEN     = 1024
         self.found       = False
+        self.enlace      = enlace.enlace() 
 
     def thread(self):
         """ RX thread, to send data in parallel with the code
@@ -96,13 +97,32 @@ class RX(object):
         self.threadResume()
         return(b)
 
-    def getNData(self, size):
+    def getNData(self, size,type):
         """ Read N bytes of data from the reception buffer
 
         This function blocks until the number of bytes is received
         """
-        #self.clearBuffe
-
+        #Rx define Syn1
+        if (self.getBufferLen() == self.enlace.head_Syn1):
+            type = "syn1"
+            return(self.getBuffer())
+        # ''  Syn2    
+        if(self.getBuffer == self.enlace.head_Syn2):
+            type = "syn2"
+            return(self.getBuffer())
+        # '' Ack1    
+        if (self.getBufferLen() == self.enlace.head_Ack1):
+            type = "ack1"
+            return(self.getBuffer())
+        # '' Ack2   
+        if(self.getBuffer == self.enlace.head_Ack2):
+            type = "ack2"
+            return(self.getBuffer())
+        # '' Nack
+        if(self.getBuffer == self.enlace.head_Nack):
+            type = "nack"
+            return(self.getBuffer())
+            
         grandeza = 0 # Tamanho inicial da recepção 
         while(self.getBufferLen() > grandeza or self.getBufferLen()==0 ):
             grandeza = self.getBufferLen()
