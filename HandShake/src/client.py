@@ -1,6 +1,13 @@
 from enlace import *
 import time 
 import packing
+from construct import *
+import os
+import binascii
+import struct
+import codecs
+import time
+
  
 
 
@@ -34,9 +41,6 @@ def main():
 #################################HANDSHAKE
        
     while True:
-        
-            txBuffer = 0
-            
             
             #Primeiro Syn enviado pelo client
                         
@@ -44,23 +48,22 @@ def main():
             def startComunication(txBuffer):                 
             
                  #Start SYN1 CLIENT           
-                txBuffer = "d726760b0467b77803d6d1f3585deb6e"
-                txBufferOfficial = bytearray(txBuffer,'acsii')
-                return binascii.hexlify(txBufferOfficial)
-                com.sendData(head_Syn1)           
-                       
+                txBuffer = head_Syn1 
+                com.sendData(head_Syn1)
+                sleep(2.0)                       
+                return txBuffer
             
                 #ACK CASE
-            if (txBuffer == "82d7ba7ea655a2bbde5a4e2153a66dae"):        
-                print("Este pacote é um Ack e está sendo enviado para estabelecer conexão")
-                com.sendData(packetAck1)
+                if (txBuffer == "82d7ba7ea655a2bbde5a4e2153a66dae"):        
+                    print("Este pacote é um Ack e está sendo enviado para estabelecer conexão")
+                    com.sendData(packetAck1)
             
                 
                 #NACK CASE
                     
-            if (txBuffer == "ab678d51f0c329ac3031dd92367959a5"):
-                print("Este pacote é um Nack e está sendo enviado para dizer que houve falhas na conexão")
-                com.sendData(packetNack5)
+                if (txBuffer == "ab678d51f0c329ac3031dd92367959a5"):
+                    print("Este pacote é um Nack e está sendo enviado para dizer que houve falhas na conexão")
+                    com.sendData(packetNack5)
     
                     
         

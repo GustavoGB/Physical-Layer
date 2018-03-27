@@ -31,8 +31,8 @@ class RX(object):
         self.threadMutex = True
         self.READLEN     = 1024
         self.found       = False
-        self.enlace      = enlace.enlace() 
-
+        self.enlace      = self.head_Syn1 
+        
     def thread(self):
         """ RX thread, to send data in parallel with the code
         """
@@ -103,7 +103,7 @@ class RX(object):
         This function blocks until the number of bytes is received
         """
         #Rx define Syn1
-        if (self.getBufferLen() == self.enlace.head_Syn1):
+        if (self.getBufferLen() == self.head_Syn1):
             type = "syn1"
             return(self.getBuffer())
         # ''  Syn2    

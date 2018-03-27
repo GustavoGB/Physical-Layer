@@ -37,14 +37,19 @@ def main():
 
     while true:
         
-        rxBuffer = 0
+        rxBuffer(0,type) = (0,"syn1")
+         
         
-        
-        if (rxBuffer == "d726760b0467b77803d6d1f3585deb6e"):
+        if (rxBuffer == (data,"syn1")):
             #Confirmação do estabelecimento da conecção
-            packetSyn2 = self.End.SynBuild()   
-            print("Construindo Syn2{}".format(packetSyn2))
-            com.sendData(packetSyn)
+            com.sendData(head_Syn1)
+            com.sendData(head_Ack1)
+            com.sendData(head_Syn2)
+                
+            
+                
+            
+            
             
         
         

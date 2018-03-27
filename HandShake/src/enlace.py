@@ -35,7 +35,9 @@ class enlace(object):
         self.tx          = TX(self.fisica)
         self.connected   = False
         self.End         = packing.Packing()
-
+             
+        
+        
     def enable(self):
         """ Enable reception and transmission
         """
