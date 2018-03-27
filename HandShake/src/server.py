@@ -47,19 +47,6 @@ def main():
             com.sendData(head_Syn2)
                 
             
-                
-            
-            
-            
-        
-        
-        
-
-
-
-
-
-
 
     # Faz a recepção dos dados
     print ("Recebendo dados .... ")

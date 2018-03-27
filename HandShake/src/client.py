@@ -52,6 +52,7 @@ def main():
                 com.sendData(head_Syn1)
                 sleep(2.0)                       
                 return txBuffer
+                startComunication()
             
                 #ACK CASE
                 if (txBuffer == "82d7ba7ea655a2bbde5a4e2153a66dae"):        
