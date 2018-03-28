@@ -1,11 +1,12 @@
 
 
-# Projeto 2 : Datagrama
+# Projeto 3 : HandShake
 
-  Essa etapa do projeto consiste na modificação das camadas de enlace do protocolo de comunicação entre os computadores, com o objetivo de tornar a mesma um passo mais independente. Neste projeto será gerado um pacote, que encapsulará os dados (payload) e irá conter outros dados fundamentais para identificação das informações do pacote, como tamanho. Isso irá possibilitar que o server não precise previamente saber o tamanho do arquivo sendo transmitido.
+  Para estabelecer comunicação entre um servidor e qualquer cliente que queria se comunicar com o mesmo, é necessário um acordo prévio
+  feito pelo protocolo para otimizar a coneneção entre ambos server e client. Além disso, o termo HandShake remete justamente a um aberto de mãos, ou seja, algo realizado para concentrizar que a comunicação foi estabecida. 
   
   O funcionamento do empacotamento é demonstrado a seguir:
-  ![empacotamento](src/imgs/Datagrama/empacotamento.png)
+  ![empacotamento](src/imgs/HandShake/empacotamento.png)
 
 
 
@@ -14,11 +15,11 @@
 
 O código possui os seguintes arquivos : server.py; server.py; enlace.py; enlaceTx.py; enlaceRx.py; interfaceFisica.py. Sendo cada um responsável por :
 
-server.py : Código que prepara o computador para receber a imagem do Client.
+server.py : Código que prepara o computador para receber a imagem do Client. Neste momento o server também tem funções de enviar pacotes, após 
 
 client.py : Código que transmite a imagem e aguarda o fim da transmissão.
 
-enlace.py : Interface de comunicação entre a aplicação e o enlace.
+enlace.py : Interface de comunicação entre a aplicação e o enlace 
 
 enlaceTx.py : Parte do enlace responsável por encapsular os dados em um pacote.
 
