@@ -35,6 +35,7 @@ class enlace(object):
         self.tx          = TX(self.fisica)
         self.connected   = False
         self.End         = packing.Packing()
+        
              
         
         
@@ -68,33 +69,33 @@ class enlace(object):
         
     
         #Primeiro a ser enviado pelo cliente!
-        packetSyn1 = self.End.SynBuild()  #LOGO packets[0]
+        packetSyn1 = self.End.Syn1Build()  #LOGO packets[0]
         print("Construindo Syn{}".format(packetSyn1))
         #Confirmação do estabelecimento da conecção
-        packetSyn2 = self.End.SynBuild()   #LOGO packets[1]
+        packetSyn2 = self.End.Syn2Build()   #LOGO packets[1]
         print("Construindo Syn2{}".format(packetSyn2))
         #Primeio a ser enviado pelo server apóis receber o pacote Syn1 do cliente          
-        packetAck3 = self.End.AckBuild()   #LOGO packets[2]
+        packetAck3 = self.End.Ack3Build()   #LOGO packets[2]
         print("Construindo Ack1{}".format(packetAck3))
         #Enviado pelo client quando recebe confimação através do primeiro ACK entregue pelo server
-        packetAck4 = self.End.AckBuild()    #LOGO packets[3]
+        packetAck4 = self.End.Ack4Build()    #LOGO packets[3]
         print("Construindo Ack2{}".format(packetAck4))
         #Enviado caso a conecção tenha problemas
-        packetNack5 = self.End.NackBuild()  #LOGO packets[4]
+        packetNack5 = self.End.Nack5Build()  #LOGO packets[4]
         print("Construindo Nack{}".format(packetNack5))
 
 
-                
-        head_Syn1 = self.End.headBuild(start,len(data),type)  + packetSyn1
-        print(head_Syn1)
-        head_Ack1 = self.End.headBuild(start,len(data),type)  + packetAck1
-        print(head_Ack1)
-        head_Syn2 = self.End.headBuild(start,len(data),type)  + packetSyn2
-        print(head_Syn2)
-        head_Ack2 = self.End.headBuild(start,len(data),type)  + packetSyn2
-        print(head_Ack2)
-        head_Nack = self.End.headBuild(start,len(data),type)  + packetNack
-        print(head_Nack)
+        ###TipoSyn1 
+        head_Syn1 = self.End.headBuild(self.headStart,len(data),packetSyn1)
+        #print(head_Syn1)
+        head_Ack1 = self.End.headBuild(self.headStart,len(data),packetAck3)
+        #print(head_Ack1)
+        head_Syn2 = self.End.headBuild(self.headStart,len(data),packetSyn2)
+        #print(head_Syn2)
+        head_Ack2 = self.End.headBuild(self.headStart,len(data),packetAck4)
+        #print(head_Ack2)
+        head_Nack = self.End.headBuild(self.headStart,len(data),packetNack5)
+        #print(head_Nack)
                 
         
         lastHead = self.End.headBuild(len(data))
@@ -108,7 +109,7 @@ class enlace(object):
         
         self.tx.sendBuffer(data)
         
-    def getData(self,type):
+    def getData(self,kind):
         # Get n data over the enlace interface
         #Return the byte array and the size of the buffer
         
@@ -121,6 +122,6 @@ class enlace(object):
        # package_payload = self.rx.packageSearch()
        # data = self.End.unbuildPack(package_payload)
         data = self.rx.getNData(1)
-        return(data, len(data))
+        return(data, len(data),kind)
 
     

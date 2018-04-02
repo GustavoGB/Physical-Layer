@@ -9,7 +9,7 @@
 
 # Importa pacote de tempo
 import time
-import packing
+from packing import *
 import enlace 
 
 # Threads
@@ -97,38 +97,44 @@ class RX(object):
         self.threadResume()
         return(b)
 
-    def getNData(self, size,type):
+    def getNData(self):
         """ Read N bytes of data from the reception buffer
 
         This function blocks until the number of bytes is received
         """
-        """#Rx define Syn1
-        if (self.getBufferLen() == self.head_Syn1):
-            type = "syn1"
-            return(self.getBuffer())
-        # ''  Syn2    
-        if(self.getBuffer == self.enlace.head_Syn2):
-            type = "syn2"
-            return(self.getBuffer())
-        # '' Ack1    
-        if (self.getBufferLen() == self.enlace.head_Ack1):
-            type = "ack1"
-            return(self.getBuffer())
-        # '' Ack2   
-        if(self.getBuffer == self.enlace.head_Ack2):
-            type = "ack2"
-            return(self.getBuffer())
-        # '' Nack
-        if(self.getBuffer == self.enlace.head_Nack):
-            type = "nack"
-       ###     return(self.getBuffer())
-          """  
+           
         grandeza = 0 # Tamanho inicial da recepção 
         while(self.getBufferLen() > grandeza or self.getBufferLen()==0 ):
             grandeza = self.getBufferLen()
             print('tamanho dos dados'  .format(grandeza))
             time.sleep(2.0)
-        return(self.getBuffer(grandeza))
+        
+        kind = self.getBuffer()
+        kind = kind[23:32]
+        print("plotando a parte kind da mensagem recebida {}" .format(kind))
+        #Rx define Syn1
+        
+        if kind == synOfficial:
+            kind = "syn1"
+            print(kind)
+            return kind
+        # ''  Syn2    
+        if(self.getBuffer == self.enlace.head_Syn2):
+            kind = "syn2"
+            return(self.getBuffer())
+        # '' Ack1    
+        if (self.getBufferLen() == self.enlace.head_Ack1):
+            kind = "ack1"
+            return(self.getBuffer())
+        # '' Ack2   
+        if(self.getBuffer == self.enlace.head_Ack2):
+            kind = "ack2"
+            return(self.getBuffer())
+        # '' Nack
+        if(self.getBuffer == self.enlace.head_Nack):
+            kind = "nack"
+            return(self.getBuffer())
+       
 
 
     def clearBuffer(self):
@@ -137,21 +143,4 @@ class RX(object):
         self.buffer = b""
 
 
-    """def packageSearch(self): 
-        End = packing.Packing()
-        Eop = End.eopBuild()
-        search = self.buffer.find(Eop)
-        # Flag para encontrar o pacote e seu eop
-        if (search != -1):
-            self.threadPause()
-            print(search)
-            self.found = True
-            print("It's there")
-            packet = self.buffer[:search] # Configure the packet
-            self.buffer = self.buffer[search+len(Eop):]
-            self.threadResume()
-            print('packet achado na procura do recebimento {}' .format(packet))
-            return packet
-        else:
-            #print("Idk")
-            self.found = False  """
+   

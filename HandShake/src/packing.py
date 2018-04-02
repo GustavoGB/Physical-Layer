@@ -24,7 +24,7 @@ class Packing():
         
    
                 
-    def headBuild(self,dataLen,type): 
+    def headBuild(self,dataLen,kind): 
         header = self.head.build(dict
         (start = self.headSTART,
         size   = dataLen,
