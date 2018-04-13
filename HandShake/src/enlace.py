@@ -117,11 +117,9 @@ class enlace(object):
         print('entrou na tentativa de ler')   
         print('tamanho do buffer no enlac {}'  .format(self.rx.getBufferLen()))
         
-        
-
        # package_payload = self.rx.packageSearch()
        # data = self.End.unbuildPack(package_payload)
         data = self.rx.getNData(1)
-        return(data, len(data),kind)
+        return(data,kind)
 
     

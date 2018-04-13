@@ -31,7 +31,7 @@ class RX(object):
         self.threadMutex = True
         self.READLEN     = 1024
         self.found       = False
-       # self.enlace      = self.head_Syn1 
+        self.End         = packing.Packing()
         
     def thread(self):
         """ RX thread, to send data in parallel with the code
@@ -109,33 +109,33 @@ class RX(object):
             print('tamanho dos dados'  .format(grandeza))
             time.sleep(2.0)
         
+        
+        ###Definindo o tipo dos pacotes para o handShake
         kind = self.getBuffer()
         kind = kind[23:32]
         print("plotando a parte kind da mensagem recebida {}" .format(kind))
         #Rx define Syn1
         
-        if kind == synOfficial:
+        if (kind == self.End.Syn1Build()):
             kind = "syn1"
-            print(kind)
             return kind
-        # ''  Syn2    
-        if(self.getBuffer == self.enlace.head_Syn2):
+        # '' Syn2    
+        if (kind == self.End.Syn2Build()):
             kind = "syn2"
-            return(self.getBuffer())
-        # '' Ack1    
-        if (self.getBufferLen() == self.enlace.head_Ack1):
-            kind = "ack1"
-            return(self.getBuffer())
-        # '' Ack2   
-        if(self.getBuffer == self.enlace.head_Ack2):
-            kind = "ack2"
-            return(self.getBuffer())
+            return kind
+        # '' Ack3    
+        if (kind == self.End.Ack3Build()):
+            kind = "ack3"
+            return kind 
+        # '' Ack4   
+        if(kind == self.End.Ack4Build()):
+            kind = "ack4"
+            return kind
         # '' Nack
-        if(self.getBuffer == self.enlace.head_Nack):
+        if(kind == self.End.Nack5Build()):
             kind = "nack"
-            return(self.getBuffer())
+            return kind
        
-
 
     def clearBuffer(self):
         """ Clear the reception buffer

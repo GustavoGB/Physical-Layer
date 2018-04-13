@@ -35,17 +35,27 @@ class Packing():
     #All the values of the packts can be found just using an md5hash algorithm
 
     
-    def SynBuild(self):
-        syn = "d726760b0467b77803d6d1f3585deb6e"
-        synOfficial = bytearray(syn,'ascii')
-        return binascii.hexlify(synOfficial)
+    def Syn1Build(self):
+        syn1 = "d726760b0467b77803d6d1f3585deb6e"
+        syn1bits = bytearray(syn1,'ascii')
+        return binascii.hexlify(syn1bits)
         
-    def AckBuild(self):
-        ack = "82d7ba7ea655a2bbde5a4e2153a66dae"
-        ackOfficial = bytearray(ack,'ascii')
-        return binascii.hexlify(ackOfficial)
+    def Syn2Build(self):
+        syn2 = "4eabd5b4f115642ead051a5d193498ad"
+        syn2bits = bytearray(syn2,'ascii')
+        return binascii.hexlify(syn2bits)
         
-    def NackBuild(self):
+    def Ack3Build(self):
+        ack3 = "82d7ba7ea655a2bbde5a4e2153a66dae"
+        ack3bits = bytearray(ack3,'ascii')
+        return binascii.hexlify(ack3bits)
+        
+    def Ack4Build(self):
+        ack4 = "48911fb213cfb432a4ff2c92247e0a63"
+        ack4bits = bytearray(ack4,'ascii')
+        return binascii.hexlify(ack4bits)        
+        
+    def Nack5Build(self):
         nack = "ab678d51f0c329ac3031dd92367959a5"
         nackOfficial = bytearray(nack,'ascii')
         return binascii.hexlify(nackOfficial)

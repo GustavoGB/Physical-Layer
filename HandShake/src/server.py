@@ -37,12 +37,11 @@ def main():
 
     while true:
         
-        com.getData(kind) = ("syn1")
+        rxBuffer(0,type) = (0,"syn1")
          
         
-        if (com.getData == ("syn1")):
+        if (rxBuffer == (data,"syn1")):
             #Confirmação do estabelecimento da conecção
-            com.sendData(head_Syn1)
             com.sendData(head_Ack1)
             com.sendData(head_Syn2)
                 
