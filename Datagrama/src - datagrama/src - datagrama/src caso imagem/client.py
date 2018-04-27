@@ -21,13 +21,13 @@ import time
 #serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
 serialName = "COM1"                  # Windows(variacao de)
-                                      # Windows(variacao de)
+serialName2 = "COM3"                  # Windows(variacao de)
 print("abriu com")
 
 def main():
     # Inicializa enlace ... variavel com possui todos os metodos e propriedades do enlace, que funciona em threading
     com = enlace(serialName)
-    
+    com2 = enlace(serialName2)
 
     # Ativa comunicacao
     com.enable()
@@ -40,29 +40,40 @@ def main():
     imageW = "./imgs/recebidaTeste.png"
 
 while True:
-    print("HandShake")    
-    syn   = bytes([0,0,0,7])
-    ack   = bytes([0,0,2,8])
-    nack  = bytes([0,1,2,2])
+    print("HandShake")
+    print("Criando sinal Syn")
+    syn = bytes([0,0,0,7])
+    ack = bytes([0,0,2,8])
+    nack = bytes([0,1,2,2])
     dados = bytes([5,5,5,5])
-    tipo  = bytes([0,0,0,0])
-
+    com.sendData(data,syn) #Enviando Syn
+    sleep(0.5)
+    tipo = bytes[0,0,0,0]
+    rxBuffer,tipo,tamanho = com.getData() 
     while tipo == bytes[0,0,0,0]: # Reconhecendo o Syn   
+        rxBuffer,tipo,tamanho = com.getData()
+        if tipo == ack:  # Se o tipo for ack
+            print("Client recebeu o ack, esperando syn")           
+        sleep(1)
+        else: 
+            print("............")# Caso não tenha recebido o ack
+            com.sendData(data,nack) # envia um nack
+        sleep(1)
+            if tipo == nack:
+                print("Reenviando pacote ack...")
+                com.sendData(data,ack)
+                sleep(1) # Reenvia o sinal ack
+    while tipo == bytes[0,0,0,0]: # Esperando Ack final   
         rxBuffer,tipo,tamanho == com.getData()
         if tipo == syn:  # Se o rxBuffer estiver com o Syn!
-            print("Server recebeu o syn, enviado ack")           
+            print("Client recebeu o syn, vou te mandar um ack")
+            com.sendData(data,ack)
+        else:
+            com.sendData(data,nack)
+            if tipo == nack:
+                com.sendData(data,syn)
         sleep(1)
-        com.sendData(data,ack)
-            print("Server enviado o Syn")
-        sleep(1)
-        com.sendData(data,syn)
-            print("Server enviou o syn, esperando ack final")    
-    while tipo == bytes[0,0,0,0]: # Esperando Ackfinal   
-        rxBuffer,tipo,tamanho == com.getData()
-        if tipo == ack:  # Se o rxBuffer estiver com o Syn!
-            print("Server recebeu o ack, pronto para iniciar comunicação")
-
-             # Enviando syn e ack para o client
+    
             '''else:  # Caso em que houve problemas na comunicacao 
             prin("Houve um erro na comunicacao, reevie o syn novamente por favor")
             com.sendData(nack) # Envia Nack
@@ -96,7 +107,7 @@ while True:
     print (" - {}".format(imageR))
     print("-------------------------")
     txBuffer = open(imageR, 'rb').read()
-    txLen    = len(txBuffer) 
+    txLen    = len(txBuffer)
     print(txLen)
 
     # Transmite imagem
@@ -139,7 +150,7 @@ while True:
 if __name__ == "__main__":
     main()
 
-
-    
-
+        
+            
+        
   
