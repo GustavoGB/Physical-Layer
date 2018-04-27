@@ -41,26 +41,28 @@ def main():
 
 while True:
     print("HandShake")
-    print("Criando sinal Syn")
+    
     syn = bytes([0,0,0,7])
     ack = bytes([0,0,2,8])
     nack = bytes([0,1,2,2])
     dados = bytes[5,5,5,5]
-    com.sendData(data,syn) #Enviando Syn
-    sleep(0.5)
     tipo = bytes[0,0,0,0]
-    rxBuffer,tipo,tamanho == com2.getData()
+
     while tipo == bytes[0,0,0,0]: # Reconhecendo o Syn   
         rxBuffer,tipo,tamanho == com2.getData()
-        if tipo == ack:  # Se o rxBuffer estiver com o Syn!
-            print("Client recebeu o ack, esperando syn")           
+        if tipo == syn:  # Se o rxBuffer estiver com o Syn!
+            print("Server recebeu o syn, enviado ack")           
         sleep(1)
+        com.sendData(data,ack)
+            print("Server enviado o Syn")
+        sleep(1)
+        com.sendData(data,syn)
+            print("Server enviou o syn, esperando ack final")    
     while tipo == bytes[0,0,0,0]: # Esperando Ackfinal   
         rxBuffer,tipo,tamanho == com2.getData()
-        if tipo == syn:  # Se o rxBuffer estiver com o Syn!
-            print("Client recebeu o syn, vou te mandar um ack")
-            com.sendData(data,ack)
-        sleep(1)
+        if tipo == ack:  # Se o rxBuffer estiver com o Syn!
+            print("Server recebeu o ack, pronto para iniciar comunicação")
+
              # Enviando syn e ack para o client
             '''else:  # Caso em que houve problemas na comunicacao 
             prin("Houve um erro na comunicacao, reevie o syn novamente por favor")
@@ -138,7 +140,7 @@ while True:
 if __name__ == "__main__":
     main()
 
-        
-            
-        
+
+    
+
   

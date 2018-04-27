@@ -95,7 +95,7 @@ class TX(object):
         #constroi EOP
         data += bytes([255,254,253,252])
         
-        cargaUtilByte = (cargaUtil).to_bytes(4, byteorder='big') #0xMS ... LS 
+        cargaUtilByte = (cargaUtil).to_bytes(8, byteorder='big') #0xMS ... LS 
         #verificacao = int.from_bytes(cargaUtilByte, byteorder='big')
     
         data =  cargaUtilByte + data
