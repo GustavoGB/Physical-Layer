@@ -122,7 +122,7 @@ class RX(object):
 
     def extractHeader(self,data):
         header = int.from_bytes([data[0],data[1],data[2],data[3]], byteorder = 'big')
-        print('No desempacotador, entendeu-se um payload de {}' .format(header))
+        print(header)
         tipo = int.from_bytes([data[4],data[5],data[6],data[7]],byteorder='big')
         return header,tipo   
 

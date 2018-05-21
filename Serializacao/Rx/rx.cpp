@@ -23,7 +23,20 @@ void sw_uart_write_string(due_sw_uart *uart, char* stringData) {
 }
 
 int calc_even_parity(char data) {
-  
+    //Percorre o data
+    int sum = 0;
+    int j;
+    for (int i = 0; i<=7,i++){
+        j = (data >> i) & 0x01;
+        sum += j;
+    }
+    // Verificar a paridade
+    if (sum % 2 == 0){
+        return 1;
+    }
+    else{
+        return 0;
+    }
 }
 
 // recebimento de dados da serial
