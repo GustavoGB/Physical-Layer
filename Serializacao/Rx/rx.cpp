@@ -26,7 +26,7 @@ int calc_even_parity(char data) {
     //Percorre o data
     int sum = 0;
     int j;
-    for (int i = 0; i<=7,i++){
+    for (int i = 0; i<=7;i++){
         j = (data >> i) & 0x01;
         sum += j;
     }
