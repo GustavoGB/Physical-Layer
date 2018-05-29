@@ -109,8 +109,8 @@ class RX(object):
         posicaoEOP = self.localizaEOP(data)
         print("Na leitura no rx localizou o EOP na posicao: {}" .format(posicaoEOP)) 
         
-
-        payload = data[8:len(data-5)]
+        print(data)
+        payload = data[8:(len(data)-5)] ## data - 5 
         print(payload)
         tipo = data[4:7]
         print(tipo)
@@ -125,12 +125,16 @@ class RX(object):
 
     def extractHeader(self,data):
         
-        heaDer = int.from_bytes([data[0],data[1],data[2],data[3]], byteorder = 'big')
-        header = bytearray.decode(heaDer)  
-        print('No desempacotador, entendeu-se um payload de {}' .format(header))
-        tipo = int.from_bytes([data[4],data[5],data[6],data[7]],byteorder='big')
+       #cabecalho = int.from_bytes([data[0]:data[3]], byteorder = 'big')
+        cabecalho = data[0:3]
+        cabecalhoOficial = int.from_bytes(cabecalho,byteorder = 'big')
+        print(cabecalho) # TESTE  
+        print('No desempacotador, entendeu-se um payload de {}' .format(cabecalho))
+        tipo = data[4:7]
+        tipoOficial = int.from_bytes(tipo,byteorder = 'big')
+       # tipo = int.from_bytes([data[4]:data[7]],byteorder='big')
         print(tipo)   #TESTE    
-        return heaDer,tipo   
+        return cabecalhoOficial,tipoOficial   
 
         
     def localizaEOP(self,data):
