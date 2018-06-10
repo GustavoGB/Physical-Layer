@@ -40,16 +40,15 @@ def main():
         nack  = bytes([0,1,2,2])
         dados = bytes([5,5,5,5])
         tipo = 0 
-        rxBuffer,tipo,tamanho == com.getData()
         while tipo ==  0 : # Reconhecendo o Syn   
+            rxBuffer,tipo,tamanho == com.getData()
+            time.sleep(0.5)
             if tipo == syn:  # Se o rxBuffer estiver com o Syn!
                 print("Server recebeu o syn, enviado ack")           
-            sleep(1)
-            com.sendData(data,ack)
-            print("Server enviando o Syn")
-            sleep(1)
-            com.sendData(data,syn)
-            print("Server enviou o syn, esperando ack final")       
+                com.sendData(data,ack)
+                 print("Server enviando o Syn")
+                com.sendData(data,syn)
+                print("Server enviou o syn, esperando ack final")       
             rxBuffer,tipo,tamanho == com.getData()
             if tipo == ack:  # Se o rxBuffer estiver com o Syn!
                 print("Server recebeu o ack, pronto para iniciar comunicação")

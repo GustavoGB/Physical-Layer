@@ -19,8 +19,8 @@ import time
 #   python -m serial.tools.list_ports
 
 #serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
-#serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
-serialName = "COM3"                  # Windows(variacao de)
+serialName = "/dev/tty.usbmodem1451" # Mac    (variacao de)
+#serialName = "COM3"                  # Windows(variacao de)
 
 print("abriu com")
 
@@ -42,20 +42,16 @@ def main():
         dados = bytes([5,5,5,5])
         com.sendData(data,syn) #Enviando Syn
         time.sleep(0.5)
-        tipo = 0 
-        rxBuffer,tipo,tamanho = com.getData() 
+        tipo = 0 #Só uma variável para setar o estado e aplicar a varredura
         while tipo == 0: # Reconhecendo o Syn   
             rxBuffer,tipo,tamanho = com.getData()
-        if tipo == ack:  # Se o tipo for ack
+            time.sleep(0.5)
+            if tipo == ack:  # Se o tipo for ack
             print("Client recebeu o ack, esperando syn")           
-            time.sleep(1)
-            #else:
-            #    com.sendData(data,nack) # envia um nack
-            #sleep(1)
             if tipo == nack:
                 print("Reenviando pacote ack...")
                 com.sendData(dados,ack)
-            time.sleep(1) # Reenvia o sinal ack
+                tipo = 0 # Reenvia o sinal ack
         while tipo == 0: # Esperando Ack final   
             rxBuffer,tipo,tamanho == com.getData()
             if tipo == syn:  # Se o rxBuffer estiver com o Syn!

@@ -110,7 +110,8 @@ class RX(object):
         print("Na leitura no rx localizou o EOP na posicao: {}" .format(posicaoEOP)) 
         
         print(data)
-        payload = data[8:(len(data)-5)] ## data - 5 
+        tamanhoDados = len(data)-5
+        payload = data[8:tamanhoDados] ## data - 5 
         print(payload)
         tipo = data[4:7]
         print(tipo)
