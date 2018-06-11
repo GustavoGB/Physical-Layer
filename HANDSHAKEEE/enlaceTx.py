@@ -91,15 +91,19 @@ class TX(object):
         return(self.threadMutex)
         
     def packMessage(self,data,tipo):
-        cargaUtil = len(data)
         #constroi EOP
-        dataEop = data + bytes([255,254,253,252])
-        
-        head = (cargaUtil).to_bytes(4, byteorder='big') + tipo  #0xMS ... LS 
-        #verificacao = int.from_bytes(cargaUtilByte, byteorder='big')
+        eop = bytes([255,254,253,252])
+        eopBruto  = len(str(eop))
+        cargaUtil = len(str(data))
 
+        print(data)
+        #constroi Head
+        head = (cargaUtil).to_bytes(4, byteorder='big') + tipo   
+        #Concatena o payload com o eop
+        dataEop = data + eopBruto
+        #Concatena o head com o payload e o Eop
         data =  head + dataEop
-                     
+
         return data,tipo    
         
         

@@ -104,7 +104,8 @@ class RX(object):
         #while(self.getBufferLen() < size):
          #   time.sleep(0.05)
         
-        header = self.extractHeader(data) 
+        header,tipo = self.extractHeader(data) 
+        print (tipo)
         print("Na leitura no rx extraiu o seguinte tamanho de carga util: {}" .format(header)) 
         posicaoEOP = self.localizaEOP(data)
         print("Na leitura no rx localizou o EOP na posicao: {}" .format(posicaoEOP)) 
@@ -125,15 +126,13 @@ class RX(object):
 
 
     def extractHeader(self,data):
-        
-       #cabecalho = int.from_bytes([data[0]:data[3]], byteorder = 'big')
+    
         cabecalho = data[0:3]
         cabecalhoOficial = int.from_bytes(cabecalho,byteorder = 'big')
         print(cabecalho) # TESTE  
         print('No desempacotador, entendeu-se um payload de {}' .format(cabecalho))
         tipo = data[4:7]
         tipoOficial = int.from_bytes(tipo,byteorder = 'big')
-       # tipo = int.from_bytes([data[4]:data[7]],byteorder='big')
         print(tipo)   #TESTE    
         return cabecalhoOficial,tipoOficial   
 
