@@ -1,4 +1,4 @@
- 
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #####################################################
@@ -29,9 +29,7 @@ def main():
         
         com = enlace(serialName)
         com.enable()
-        imageR = "./imgs/imageC.png"
         imageW = "./imgs/recebidaTeste.png"
-        txBuffer = open(imageR, 'rb').read()
 
         print("HandShake")    
         syn   = bytes([0,0,0,7])
@@ -53,6 +51,7 @@ def main():
                 print("Server enviou o syn, esperando ack final")   
             else:
                 print("Enviando Nack, pacote syn perdido")
+                
                 com.sendData(data,nack)    
             rxBuffer,tipo,tamanho == com.getData()
             if tipo == ack:  # Se o rxBuffer estiver com o Syn!

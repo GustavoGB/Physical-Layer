@@ -88,35 +88,26 @@ class RX(object):
         """ Remove n data from buffer
         """
         self.threadPause()
-        b           = self.buffer[0:nData]
-        self.buffer = self.buffer[nData:]
-        self.threadResume()
-        return(b)
 
-    def getNData(self):
-        
-        """ o size tera de ser removido"""
-        
-        time.sleep(2)  #devido ao header e ao EOP
-        data = self.getAllBuffer(len) 
-        print(data) #Teste para ver oq esta chegando 
-        #chegou mensagem, coloca-se um time out .. como espera... e letudo... tem que achar um heaer e um EOP        
-        #while(self.getBufferLen() < size):
-         #   time.sleep(0.05)
-        
-        header,tipo = self.extractHeader(data) 
-        print (tipo)
-        print("Na leitura no rx extraiu o seguinte tamanho de carga util: {}" .format(header)) 
-        posicaoEOP = self.localizaEOP(data)
-        print("Na leitura no rx localizou o EOP na posicao: {}" .format(posicaoEOP)) 
-        
-        print(data)
-        tamanhoDados = len(data)-5
-        payload = data[8:tamanhoDados] ## data - 5 
-        print(payload)
-        tipo = data[4:7]
+        pack = self.buffer[0:nData]
+
+        enfofPacket.buffer = self.buffer.find(b'333333333333')
+
+        headofPacket = self.buffer[0:4] 
+        print(head)
+        tipo = self.buffer[4:7]
         print(tipo)
-        return(payload,tipo) # Adicionar na fragmentacao = Numero de pacotes, qual o pacote.
+        payload  = pack[8:endofPacket]
+        
+        if tipo == dados :
+            print("Payload de ....",int.from_bytes(headofPacket,byteorder = 'big'),'bytes')
+        self.clearBuffer()
+        self.threadResume()
+
+        return(payload,tipo)
+    def getNData(self):
+     
+        # Adicionar na fragmentacao = Numero de pacotes, qual o pacote.
 
 
     def clearBuffer(self):
@@ -125,30 +116,4 @@ class RX(object):
         self.buffer = b""
 
 
-    def extractHeader(self,data):
-    
-        cabecalho = data[0:3]
-        cabecalhoOficial = int.from_bytes(cabecalho,byteorder = 'big')
-        print(cabecalho) # TESTE  
-        print('No desempacotador, entendeu-se um payload de {}' .format(cabecalho))
-        tipo = data[4:7]
-        tipoOficial = int.from_bytes(tipo,byteorder = 'big')
-        print(tipo)   #TESTE    
-        return cabecalhoOficial,tipoOficial   
-
-        
-    def localizaEOP(self,data):
-        cont=0
-        posicao = 0
-        
-        for i in data:
-            #print('indo {}' .format(data[cont]))
-            if data[cont] == 255 and data[cont+1] == 254 and data[cont+2] == 253 and data[cont+3] == 252:
-                print("Achou o EOP  na posicao {}"  .format(cont))
-                posicao = cont
-                break
-            cont += 1    
-        return (posicao)
-        
-        
         

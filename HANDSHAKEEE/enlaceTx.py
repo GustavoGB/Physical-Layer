@@ -73,6 +73,7 @@ class TX(object):
         self.transLen   = 0
         self.buffer = data
         self.threadMutex  = True
+        
 
     def getBufferLen(self):
         """ Return the total size of bytes in the TX buffer
@@ -91,20 +92,30 @@ class TX(object):
         return(self.threadMutex)
         
     def packMessage(self,data,tipo):
+        #Cria Head
+        headofPacket = (len(data)).to_bytes(4, byteorder = 'big')
+        #Concatena o head com o tipo da msg 
+        headofPacket += tipo
+        #Cria Eop
+        endofPacket = (333333333333).to_bytes(4, byteorder = 'big')
+        #Concatena o pacote completo
+        allPacket = headofPacket + data + endofPacket
+        
+        return allPacket,tipo
+            
         #constroi EOP
-        eop = bytes([255,254,253,252])
-        eopBruto  = len(str(eop))
-        cargaUtil = len(str(data))
-
-        print(data)
+        #eop = bytes([255,254,253,252])
+        #eopBruto  = len(str(eop))
+        #cargaUtil = len(str(data))
+        #print(data)
         #constroi Head
-        head = (cargaUtil).to_bytes(4, byteorder='big') + tipo   
+        #head = (cargaUtil).to_bytes(4, byteorder='big') + tipo   
         #Concatena o payload com o eop
-        dataEop = data + eopBruto
+        #dataEop = data + eopBruto
         #Concatena o head com o payload e o Eop
-        data =  head + dataEop
+        #data =  head + dataEop
 
-        return data,tipo    
+        #return data,tipo    
         
         
         

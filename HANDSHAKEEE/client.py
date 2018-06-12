@@ -47,7 +47,7 @@ def main():
             rxBuffer,tipo,tamanho = com.getData()
             time.sleep(0.5)
             if tipo == ack:  # Se o tipo for ack
-            print("Client recebeu o ack, esperando syn")           
+                print("Client recebeu o ack, esperando syn")           
             if tipo == nack:
                 print("Reenviando pacote ack...")
                 com.sendData(dados,ack)
@@ -63,7 +63,6 @@ def main():
                     com.sendData(dados,syn)
             time.sleep(1)
 
-                
         # Log
         print("-------------------------")
         print("Comunicação inicializada")
