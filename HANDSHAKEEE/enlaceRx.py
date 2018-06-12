@@ -89,26 +89,39 @@ class RX(object):
         """
         self.threadPause()
 
-        pack = self.buffer[0:nData]
+        AllPacket = self.buffer[0:nData]
 
-        enfofPacket.buffer = self.buffer.find(b'333333333333')
+        endofPacket = self.buffer.find(b'333333333333')
 
         headofPacket = self.buffer[0:4] 
-        print(head)
+        print(headofPacket)
         tipo = self.buffer[4:7]
         print(tipo)
-        payload  = pack[8:endofPacket]
+        payload  = AllPacket[8:endofPacket]
         
-        if tipo == dados :
-            print("Payload de ....",int.from_bytes(headofPacket,byteorder = 'big'),'bytes')
+        
         self.clearBuffer()
         self.threadResume()
 
         return(payload,tipo)
     def getNData(self):
-     
-        # Adicionar na fragmentacao = Numero de pacotes, qual o pacote.
+        self.clearBuffer()
+        tamanho = 0
 
+        start = time.time()  # Começar timer
+
+        while (self.getBufferLen() < tamanho or self.getBufferLen() == 0):
+            tamanho = self.getBufferLen()
+            time.sleep(0.5)
+
+            end = time.time()  # Stop timer
+            print("%.2f" % (end-start), '/ 10 seg')
+
+            if (end - start) > 10:
+                return ()
+
+        return(self.getBuffer(tamanho)) 
+      
 
     def clearBuffer(self):
         """ Clear the reception buffer

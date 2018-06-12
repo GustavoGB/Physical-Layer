@@ -60,6 +60,18 @@ class TX(object):
         """ Resume the TX thread (after suspended)
         """
         self.threadMutex = True
+        
+    def packMessage(self,data,tipo):
+        #Cria Head
+        headofPacket = (len(data)).to_bytes(4, byteorder = 'big')
+        #Concatena o head com o tipo da msg 
+        headofPacket += tipo
+        #Cria Eop
+        endofPacket = (333333333333).to_bytes(4, byteorder = 'big')
+        #Concatena o pacote completo
+        allPacket = headofPacket + data + endofPacket
+        
+        return allPacket,tipo
 
     def sendBuffer(self, data,tipo):
         """ Write a new data to the transmission buffer.
@@ -91,17 +103,7 @@ class TX(object):
        
         return(self.threadMutex)
         
-    def packMessage(self,data,tipo):
-        #Cria Head
-        headofPacket = (len(data)).to_bytes(4, byteorder = 'big')
-        #Concatena o head com o tipo da msg 
-        headofPacket += tipo
-        #Cria Eop
-        endofPacket = (333333333333).to_bytes(4, byteorder = 'big')
-        #Concatena o pacote completo
-        allPacket = headofPacket + data + endofPacket
-        
-        return allPacket,tipo
+
             
         #constroi EOP
         #eop = bytes([255,254,253,252])

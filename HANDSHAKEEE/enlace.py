@@ -62,9 +62,9 @@ class enlace(object):
         Return the byte array and the size of the buffer
         """
 
-        payload,tipo = self.rx.getNData()
+        data,tipo = self.rx.getNData()
 
-        return(payload, tipo,len(payload))
+        return(data, tipo,len(data))
 
         
     

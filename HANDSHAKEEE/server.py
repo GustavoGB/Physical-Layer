@@ -22,20 +22,27 @@ serialName = "COM1"                  # Windows(variacao de)
 print("abriu com")
 
 def main():
-    
-    server = True
 
-    while server == True:
+
+    while (True):
         
         com = enlace(serialName)
         com.enable()
         imageW = "./imgs/recebidaTeste.png"
 
         print("HandShake")    
+        print("Esperando Syn 1 para estabelecer contato......")
+
+        rxBuffer,tipo = com.getData()
+
         syn   = bytes([0,0,0,7])
         ack   = bytes([0,0,2,8])
         nack  = bytes([0,1,2,2])
         dados = bytes([5,5,5,5])
+        if tipo == dados :
+            ("***SYN1 ENCONTRADO***")
+            print(rxBuffer,tipo)
+        
         data = 0 
         tipo = 0 
         rxBuffer = 0
