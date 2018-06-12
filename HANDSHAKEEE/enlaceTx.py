@@ -60,14 +60,14 @@ class TX(object):
         """ Resume the TX thread (after suspended)
         """
         self.threadMutex = True
-        
+
     def packMessage(self,data,tipo):
         #Cria Head
         headofPacket = (len(data)).to_bytes(4, byteorder = 'big')
         #Concatena o head com o tipo da msg 
         headofPacket += tipo
         #Cria Eop
-        endofPacket = (333333333333).to_bytes(4, byteorder = 'big')
+        endofPacket = (33333333).to_bytes(4, byteorder = 'big')
         #Concatena o pacote completo
         allPacket = headofPacket + data + endofPacket
         

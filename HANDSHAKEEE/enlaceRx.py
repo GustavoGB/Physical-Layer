@@ -75,14 +75,6 @@ class RX(object):
         """
         return(len(self.buffer))
 
-    def getAllBuffer(self, len):
-        """ Read ALL reception buffer and clears it
-        """
-        self.threadPause()
-        b = self.buffer[:]
-        self.clearBuffer()
-        self.threadResume()
-        return(b)
 
     def getBuffer(self, nData):
         """ Remove n data from buffer
@@ -91,7 +83,7 @@ class RX(object):
 
         AllPacket = self.buffer[0:nData]
 
-        endofPacket = self.buffer.find(b'333333333333')
+        endofPacket = self.buffer.find(b'33333333')
 
         headofPacket = self.buffer[0:4] 
         print(headofPacket)
@@ -104,6 +96,7 @@ class RX(object):
         self.threadResume()
 
         return(payload,tipo)
+
     def getNData(self):
         self.clearBuffer()
         tamanho = 0
@@ -117,7 +110,7 @@ class RX(object):
             end = time.time()  # Stop timer
             print("%.2f" % (end-start), '/ 10 seg')
 
-            if (end - start) > 10:
+            if (end - start) > 5:
                 return ()
 
         return(self.getBuffer(tamanho)) 

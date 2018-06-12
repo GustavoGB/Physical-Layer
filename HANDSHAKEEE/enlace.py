@@ -64,7 +64,7 @@ class enlace(object):
 
         data,tipo = self.rx.getNData()
 
-        return(data, tipo,len(data))
+        return(data, tipo)
 
         
     

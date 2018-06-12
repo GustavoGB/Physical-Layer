@@ -19,8 +19,8 @@ import time
 #   python -m serial.tools.list_ports
 
 #serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
-serialName = "/dev/tty.usbmodem1451" # Mac    (variacao de)
-#serialName = "COM3"                  # Windows(variacao de)
+#serialName = "/dev/tty.usbmodem1451" # Mac    (variacao de)
+serialName = "COM3"                  # Windows(variacao de)
 
 print("abriu com")
 
@@ -34,13 +34,23 @@ def main():
         txBuffer = open(imageR, 'rb').read()
         data = txBuffer
 
+        #Tipos:
+        # Syn 1  = 1
+        # Syn 2  = 3
+        # Ack 1  = 4 
+        # Ack 2  = 5 
+        # Dados  = 7 
+        # Bugs   = 9 
+        #
         print("HandShake")
-        print("Criando sinal Syn")
-        syn = bytes([0,0,0,7])
-        ack = bytes([0,0,2,8])
-        nack = bytes([0,1,2,2])
-        dados = bytes([5,5,5,5])
-        com.sendData(data,syn) #Enviando Syn
+
+        print("Criando sinal Syn1")
+        data = (8).to_bytes(1,byteorder = 'big')
+        tipo = (1).to_bytes(1,byteorder='big')
+        com.sendData(data,tipo) #Enviando Syn
+        print("SYNC1...ENVIADO!!")
+        print(data,tipo)
+        tipo = 1 
         time.sleep(0.5)
         tipo = 0 #Só uma variável para setar o estado e aplicar a varredura
         while tipo == 0: # Reconhecendo o Syn   
