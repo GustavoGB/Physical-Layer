@@ -17,7 +17,7 @@ import time
 
 #serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
-serialName = "COM1"                  # Windows(variacao de)
+serialName = "COM3"                  # Windows(variacao de)
                                       # Windows(variacao de)
 print("abriu com")
 
@@ -30,17 +30,27 @@ def main():
         while (True):
             
             print("HandShake")    
-            print("Esperando Syn 1 para estabelecer contato......")
-            rxBuffer,tipo = com.getData()
 
-            syn   = bytes([0,0,0,7])
-            ack   = bytes([0,0,2,8])
-            nack  = bytes([0,1,2,2])
-            dados = bytes([5,5,5,5])
-            if tipo == dados :
+
+            #Tipos:
+            # Syn 1  = 1
+            # Syn 2  = 3
+            # Ack 1  = 4 
+            # Ack 2  = 5 
+            # Dados  = 7 
+            # Bugs   = 9 
+
+            rxBuffer,tipo = com.getData()
+            tipo = int.from_bytes(tipo,byteorder='big')
+            print("Esperando Syn 1 para estabelecer contato......")
+            tipo = (7).from_bytes(tipo,byteorder='big')
+
+            if tipo == 1 :
                 ("***SYN1 ENCONTRADO***")
                 print(rxBuffer,tipo)
-            
+                data = (8).to_bytes
+            if tipo == 7 :
+                ("**RECEBI**")
             data = 0 
             tipo = 0 
             rxBuffer = 0

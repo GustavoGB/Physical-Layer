@@ -20,7 +20,7 @@ import time
 
 #serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1451" # Mac    (variacao de)
-serialName = "COM3"                  # Windows(variacao de)
+serialName = "COM1"                  # Windows(variacao de)
 
 print("abriu com")
 
@@ -43,14 +43,21 @@ def main():
         # Bugs   = 9 
         #
         print("HandShake")
-
+        
+    
         print("Criando sinal Syn1")
         data = (8).to_bytes(1,byteorder = 'big')
         tipo = (1).to_bytes(1,byteorder='big')
         com.sendData(data,tipo) #Enviando Syn
         print("SYNC1...ENVIADO!!")
         print(data,tipo)
-        tipo = 1 
+        
+        print("Esperando Ack1.....")
+        rxBuffer,tipo = com.getData()
+        tipo = (int.from_bytes(tipo, byteorder='big'))
+        print("ACK1...RECEBIDO COM SUCESSO")
+        
+
         time.sleep(0.5)
         tipo = 0 #Só uma variável para setar o estado e aplicar a varredura
         while tipo == 0: # Reconhecendo o Syn   
@@ -89,32 +96,17 @@ def main():
 
         # Transmite imagem
         print("Transmitindo .... {} bytes".format(txLen))
-        com.sendData(data,dados)
+        tipo = (7).to_bytes(1,byteorder='big')
+        com.sendData(data,tipo)
 
-        # Atualiza dados da transmissão ... na verdade nao funciona fora do thread ..
-        txSize = com.tx.getStatus()
-        print ("Transmitido       {} bytes ".format(txSize))
+
+        #Loop fim 
+        while(com.tx.getIsBussy):
+            pass
 
         # Faz a recepção dos dados
         print ("Recebendo dados .... ")
-        #bytesSeremLidos=com2.rx.getBufferLen()
-        #print("tamanho do buffer a ser lido {}".format(bytesSeremLidos))
-            
-        rxBuffer,tipo,tamanho = com.getData()
-
-        # log
-        print ("Lido              {} bytes ".format(tamanho))
-
-        # Salva imagem recebida em arquivo
-        print("-------------------------")
-        print ("Salvando dados no arquivo :")
-        print (" - {}".format(imageW))
-        f = open(imageW, 'wb')
-        f.write(rxBuffer)
-
-        # Fecha arquivo de imagem
-        f.close()
-
+        
         # Encerra comunicação
         print("-------------------------")
         print("Comunicação encerrada")

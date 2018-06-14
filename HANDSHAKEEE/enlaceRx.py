@@ -80,21 +80,23 @@ class RX(object):
         """ Remove n data from buffer
         """
         self.threadPause()
-
         AllPacket = self.buffer[0:nData]
-
         endofPacket = self.buffer.find(b'33333333')
-
         headofPacket = self.buffer[0:4] 
-        print(headofPacket)
         tipo = self.buffer[4:7]
-        print(tipo)
         payload  = AllPacket[8:endofPacket]
+        print(AllPacket,endofPacket,headofPacket,tipo,payload)
         
-        
-        self.clearBuffer()
-        self.threadResume()
+        if int.from_bytes(tipo,byteorder='big') == 7 :
+            print(headofPacket)
+            
 
+
+        #if int.from_bytes(tipo,byteorder='big') == 7 :
+        #    print("Payload esperado de :",
+        #            int.from_bytes(headofPacket,byteorder='big',"bytes")
+       # self.clearBuffer()
+        self.threadResume()
         return(payload,tipo)
 
     def getNData(self):
@@ -110,7 +112,7 @@ class RX(object):
             end = time.time()  # Stop timer
             print("%.2f" % (end-start), '/ 10 seg')
 
-            if (end - start) > 5:
+            if (end - start) > 10:
                 return ()
 
         return(self.getBuffer(tamanho)) 
