@@ -80,11 +80,11 @@ class RX(object):
         """ Remove n data from buffer
         """
         self.threadPause()
-        AllPacket = self.buffer[0:nData]
-        endofPacket = self.buffer.find(b'33333333') #Tirou-se o Extract header e Eop para ficar mais simples
-        headofPacket = self.buffer[0:7] 
-        tipo = self.buffer[7:8]
-        payload  = AllPacket[8:endofPacket]
+        allPacket    =   self.buffer[0:nData]
+        endofPacket  =   self.buffer.find(b'111111111111') #Tirou-se o Extract header e Eop para ficar mais simples
+        headofPacket =   self.buffer[0:7]
+        tipo         =   self.buffer[7:8]
+        payload      =   allPacket[8:endofPacket]
 
         if int.from_bytes(tipo, byteorder='big') == 7 :
             print("Payload esperado de :",
@@ -98,13 +98,13 @@ class RX(object):
         self.clearBuffer()
         tamanho = 0
 
-        start = time.time()  # Começar timer
+        start = time.time() #Tick
 
-        while (self.getBufferLen() < tamanho or self.getBufferLen() == 0):
+        while (self.getBufferLen() > tamanho or self.getBufferLen() == 0):
             tamanho = self.getBufferLen()
             time.sleep(0.5)
 
-            end = time.time()  # Stop timer
+            end = time.time()  #Tock fim
             print("%.2f" % (end-start), '/ 10 seg')
 
             if (end - start) > 10:

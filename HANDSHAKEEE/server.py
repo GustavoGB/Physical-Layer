@@ -17,77 +17,55 @@ import time
 
 #serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)                                      # Windows(variacao de
+serialName = "COM4" 
 #Inicializa Enlace, ativa a comunicação e arquivo a ser recebifo
 def main():
-    serialName = "COM4"                  # Windows(variacao de)
+                     # Windows(variacao de)
     com = enlace(serialName)
     com.enable()
-    imageW = "./imgs/recebidaTeste.png"
+    imageW = "./imgs/recebida/recebidaTeste.png"
     while (True):
         print("HandShake")    
-
         #Tipos:
         # Syn 1  = 1
         # Syn 2  = 3
         # Ack 1  = 4 
         # Ack 2  = 5 
         # Dados  = 7 
-        # Bugs(Nack)   = 9 
-
         print("***RECEBENDO.....***")
-
         rxBuffer,tipo = com.getData()
         tipo = int.from_bytes(tipo,byteorder='big')
         print("Esperando Syn 1 para estabelecer contato......")
-        
+      
         #Recepção Syn1
         if tipo == 1 :
             ("***SYN1 ENCONTRADO***")
             ("___Enviando ACK1___")
-            print(rxBuffer,tipo)
             data = (8).to_bytes(1,byteorder='big')
             tipo = (4).to_bytes(1,byteorder='big')
             #Enviar Ack1!!
-            print(data,tipo)
             com.sendData(data,tipo)
             print("...........Ack1 enviado")
-            time.sleep(2.5)
-
+            time.sleep(2.0)
             #Enviando Syn2!!!
-            data(8).to_bytes(1,byteorder='big')
-            tipo(3).to_bytes(1,byteorder='big')
+            data = (8).to_bytes(1,byteorder='big')
+            tipo = (3).to_bytes(1,byteorder='big')
             com.sendData(data,tipo)
             print("...enviando Syn2...")
-        if tipo ==9 :
-            print("FALHA..Tentando estabelecer conecção novamente")
-            data = (8).to_bytes(1,byteorder='big')
-            tipo = (9).to_bytes(1,byteorder='big')
-            #Enviando Nack
-            com.sendData(data,tipo)
-            print("Nack enviado...Esperando receber Syn1 novamente...")
-            time.sleep(2)
         else:
             print("***ERRO***")
             print("***INICIANDO HS NOVAMENTE")
-            rxBuffer,tipo = com.getData()
-            tipo = int.from_bytes(tipo,byteorder='big')
-            print("Esperando Syn 1 para estabelecer contato......")
-            
-
+            continue
             #Recepção Ack2
+        print("***Esperando ACK2***")
 
-        rxBuffer,tipo = com.getData()
+        rxBuffer, tipo = com.getData()
         tipo = (int.from_bytes(tipo,byteorder='big'))
 
         if tipo == 5:
             print("***ACK2 RECEBIDO***")
             print("Comunicação Estabelecida")
             break
-        if tipo ==9:
-            print("Enviando NACK, ocorreu um erro...")
-            data = (8).to_bytes(1,byteorder='big')
-            tipo = (9).to_bytes(1,byteorder='big')
-            com.sendData(data,tipo)
         else :
             print("***ERRO***")
             print("***INICIANDO HS NOVAMENTE")

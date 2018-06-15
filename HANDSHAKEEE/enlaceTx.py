@@ -63,14 +63,15 @@ class TX(object):
 
     def packMessage(self,data,tipo):
         #Cria Head
-        headofPacket = (len(data)).to_bytes(4, byteorder = 'big')
+        headofPacket = (len(data)).to_bytes(7, byteorder = 'big')
         #Concatena o head com o tipo da msg 
         headofPacket += tipo
+        print(headofPacket) # Okei printou, significa que ele esta enviando,
         #Cria Eop
-        endofPacket = (11111111111).to_bytes(4, byteorder = 'big')
+        endofPacket = (111111111111).to_bytes(5, byteorder = 'big')
+        print(endofPacket)
         #Concatena o pacote completo
         allPacket = headofPacket + data + endofPacket
-        #Adicional Info
         overHead = len(allPacket)/len(data)
         
         #Igual RX

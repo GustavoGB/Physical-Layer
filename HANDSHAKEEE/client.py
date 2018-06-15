@@ -25,8 +25,12 @@ def main():
     while True:
         com = enlace(serialName)
         com.enable()
-        imageR = "./imgs/imageC.png"
-
+        imageR = "./imgs/main-qimg-2d5b151a8b81bb7ad6a2d43be3268944.png"
+         # Log
+        print("__________________________________________________")
+        print("Comunicação inicializada")
+        print("  porta : {}".format(com.fisica.name))
+        print("__________________________________________________")
         #Tipos:
         # Syn 1  = 1
         # Syn 2  = 3
@@ -35,40 +39,20 @@ def main():
         # Dados  = 7 
         # Bugs   = 9 
         #
-        print("HandShake")
-        
+        print("HandShake") 
         #Enviando Syn1
         print("Criando sinal Syn1")
         data = (8).to_bytes(1,byteorder = 'big')
-        tipo = (1).to_bytes(1,byteorder='big')
+        tipo = (1).to_bytes(1,byteorder = 'big')
         com.sendData(data,tipo) #Enviando Syn
         print("SYNC1...ENVIADO!!")
 
-        rxBuffer,tipo = com.getData()
-        tipo = (int.from_bytes(tipo,byteorder='big'))
-        if tipo == 9:
-            print("Client recebeu o Nack, reenviando Syn1")
-            data = (8).to_bytes(1,byteorder = 'big')
-            tipo = (1).to_bytes(1,byteorder='big')
-            com.sendData(data,tipo)
         #Recebendo Ack1
         print("Esperando Ack1.....")
         rxBuffer,tipo = com.getData()
         tipo = (int.from_bytes(tipo, byteorder='big'))
+        print("Recebido Ack1")
 
-        if tipo == 4:
-            print("ACK1...RECEBIDO COM SUCESSO")    
-            time.sleep(2)
-        if tipo == 9:
-            print("Recebi o Nack, reevinado o Syn1...")   
-            data = (8).to_bytes(1,byteorder = 'big')
-            tipo = (1).to_bytes(1,byteorder='big')
-            com.sendData(data,tipo) #Enviando Syn
-            time.sleep(2)
-        else :
-            print("***ERRO***")
-            print("***INICIANDO HS NOVAMENTE")
-            continue
         #Recebendo Syn2
         print("Esperando Syn2....") 
         rxBuffer, tipo = com.getData()
@@ -79,17 +63,17 @@ def main():
             #Criando ACK2
             data = (8).to_bytes(1,byteorder='big')
             tipo = (5).to_bytes(1,byteorder='big')
+            com.sendData(data,tipo)
             print("***ACK2 ENVIADO***")
             print("________________________________________")
             print("Conecção estabelecida")
+            print("Transmitindo .... {} bytes".format(txLen))
+            tipo = (7).to_bytes(1,byteorder='big')
+            com.sendData(txBuffer,tipo)
         
             time.sleep(3) # Continuar varrendo
+
             break
-        if tipo == 9 :
-            print("Recebi o Nack, vou reenviar o Ack2...")
-            data = (8).to_bytes(1,byteorder='big')
-            tipo = (4).to_bytes(1,byteorder='big')
-            com.sendData(data,tipo)
         else:
             print("***ERRO***")
             print("***INICIANDO HS NOVAMENTE")
@@ -101,24 +85,20 @@ def main():
     # Carrega imagem
     print ("Carregando imagem para transmissão :")
     print (" - {}".format(imageR))
-    txBuffer = open(imageW, 'rb').read()
+    txBuffer = open("./imgs/main-qimg-2d5b151a8b81bb7ad6a2d43be3268944.png", 'rb').read()
     print("-------------------------")
     txLen    = len(txBuffer)
     print(txLen)
-
-    # Transmite imagem
-    print("Transmitindo .... {} bytes".format(txLen))
-    tipo = (7).to_bytes(1,byteorder='big')
-    com.sendData(txBuffer,tipo)
 
 
     #Loop fim 
     while(com.tx.getIsBussy):
         pass
-
-    # Faz a recepção dos dados
-    print ("Recebendo dados .... ")
     
+    #Atualiza data
+    txSize = com.tx.getStatus()
+    print("Transmitido {} bytes ".format(txSize))
+
     # Encerra comunicação
     print("-------------------------")
     print("Comunicação encerrada")
