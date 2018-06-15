@@ -30,7 +30,6 @@ def main():
         com = enlace(serialName)
         com.enable()
         imageR = "./imgs/imageC.png"
-        imageW = "./imgs/recebidaTeste.png"
         txBuffer = open(imageR, 'rb').read()
         data = txBuffer
 
@@ -44,18 +43,47 @@ def main():
         #
         print("HandShake")
         
-    
+        #Enviando Syn1
         print("Criando sinal Syn1")
         data = (8).to_bytes(1,byteorder = 'big')
         tipo = (1).to_bytes(1,byteorder='big')
         com.sendData(data,tipo) #Enviando Syn
         print("SYNC1...ENVIADO!!")
         print(data,tipo)
-        
+        #Recebendo Ack1
         print("Esperando Ack1.....")
         rxBuffer,tipo = com.getData()
         tipo = (int.from_bytes(tipo, byteorder='big'))
         print("ACK1...RECEBIDO COM SUCESSO")
+        
+        #Recebendo Syn2
+        print("Esperando Syn2....") 
+        rxBuffer, tipo = com.getData()
+        tipo = (int.from_bytes(tipo, byteorder='big'))
+        if tipo == 3:
+            print("***SYN2 RECEBIDO***...")
+            print("***ACK2 SENDO ENVIADO PARA ESTABELECER CONECÇÃO")
+            #Criando ACK2
+            data = (8).to_bytes(1,byteorder='big')
+            tipo = (5).to_bytes(1,byteorder='big')
+            print("***ACK2 ENVIADO***")
+            print("________________________________________")
+            print("Conecção estabelecida")
+        
+            time.sleep(3) # Continuar varrendo
+            break
+        else:
+            if tipo == 9 :
+                print("Recebi o Nack, vou reenviar o Ack2...")
+                data = (8).to_bytes(1,byteorder='big')
+                tipo = (9).to_bytes(1,byteorder='big')
+                com.sendData(data,tipo)
+                else:
+                    print("***ERRO***")
+                    print("***INICIANDO HS NOVAMENTE")
+                    continue
+                
+            
         
 
         time.sleep(0.5)
