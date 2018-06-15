@@ -28,9 +28,7 @@ def main():
         imageW = "./imgs/recebidaTeste.png"
 
         while (True):
-            
             print("HandShake")    
-
 
             #Tipos:
             # Syn 1  = 1
@@ -38,72 +36,68 @@ def main():
             # Ack 1  = 4 
             # Ack 2  = 5 
             # Dados  = 7 
-            # Bugs   = 9 
+            # Bugs(Nack)   = 9 
 
+            print("***RECEBENDO.....***")
             rxBuffer,tipo = com.getData()
             tipo = int.from_bytes(tipo,byteorder='big')
             print("Esperando Syn 1 para estabelecer contato......")
-            tipo = (7).from_bytes(tipo,byteorder='big')
-
+            tipo = (7).from_bytes(tipo,byteorder='big'
+            #Recepção Syn1
             if tipo == 1 :
                 ("***SYN1 ENCONTRADO***")
+                ("___Enviando ACK1___")
                 print(rxBuffer,tipo)
-                data = (8).to_bytes
-            if tipo == 7 :
-                ("**RECEBI**")
-            data = 0 
-            tipo = 0 
-            rxBuffer = 0
-            tamanho = 0 
-            while tipo ==  0 : # Reconhecendo o Syn   
-                rxBuffer,tipo,tamanho == com.getData()
-                time.sleep(0.5)
-                if tipo == syn:  # Se o rxBuffer estiver com o Syn!
-                    print("Server recebeu o syn, enviando ack")           
-                    com.sendData(data,ack)
-                    print("Server enviando o Syn")
-                    com.sendData(data,syn)
-                    print("Server enviou o syn, esperando ack final")   
-                else:
-                    print("Enviando Nack, pacote syn perdido")
-                    
-                    com.sendData(data,nack)    
-                rxBuffer,tipo,tamanho == com.getData()
-                if tipo == ack:  # Se o rxBuffer estiver com o Syn!
-                    print("Server recebeu o ack, pronto para iniciar comunicação")
-                    tipo = 1 
-                    while tipo == 1 :
-                        print("Comunicação Inicializada")
-                        print("****RECEBENDO DADOS****")
-                        rxBuffer, tipo,tamanho == com.getData()
-                        print ("Lido              {} bytes ".format(tamanho))
-                        print("-------------------------")
-                        print ("Salvando dados no arquivo :")
-                        print (" - {}".format(imageW))
-                        f = open(imageW, 'wb')
-                        f.write(rxBuffer)
-                        # Fecha arquivo de imagem
-                        f.close()
-                        # Encerra comunicação
-                        print("-------------------------")
-                        print("Comunicação encerrada")
-                        print("-------------------------")
-                        com.disable()
-                        break
-                        #so roda o main quando for executado do terminal ... se for chamado dentro de outro modulo nao roda
-                else:
-                    print("Enviando Nack, pacote ack perdido")
-                    com.sendData(data,nack)
-                    print("Realizando busca novamente.........")
-                    rxBuffer,tipo,tamanho == com.getData()      
-                    time.sleep(0.5)
-                    
+                data = (8).to_bytes(1,byteorder='big')
+                tipo = (5).to_bytes(1,byteorder='big')
+                #Enviar (data,tipo)
+                print(data,tipo)
+                com.sendData(data,tipo)
+            else:
+                print("FALHA..Tentando estabelecer conecção novamente")
+                continue
+             #Recepção Ack2
+            rxBuffer,tipo = com.getData()
+            tipo = (int.from_bytes(tipo,byteorder='big'))
+            #Teste
+            print(tipo)
+            if tipo == 5:
+                print("***ACK2 RECEBIDO***")
+                print("Comunicação Estabelecida")
+                break
+            else:
+                print("Enviando NACK, ocorreu um erro...")
+                tipo = (9).to_bytes(1,byteorder='big')
+                com.sendData(data,tipo)
+                continue
+        print("__________________________________________________")
 
+        # Faz a recepção dos dados
+        print("Recebendo pacote com payload... ")
+        rxBuffer, tipo = com.getData()
 
+        # Salva o dado recebido em arquivo
+        print("__________________________________________________")
+        print("Salvando dados no arquivo :")
+        print("{}".format(dadoW))
+        f = open(dadoW, 'wb')
+        f.write(rxBuffer)
+
+        # Fecha arquivo de imagem
+        f.close()
+
+        # Encerra comunicação
+        print("__________________________________________________")
+        print("Comunicação encerrada")
+        print("__________________________________________________")
+        com.disable()
 
 
 if __name__ == "__main__":
     main()
+         
+                    
+
 
 
     
