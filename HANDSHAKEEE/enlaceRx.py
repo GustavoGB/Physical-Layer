@@ -86,16 +86,12 @@ class RX(object):
         tipo = self.buffer[4:7]
         payload  = AllPacket[8:endofPacket]
         print(AllPacket,endofPacket,headofPacket,tipo,payload)
-        
-        if int.from_bytes(tipo,byteorder='big') == 7 :
-            print(headofPacket)
-            
 
+        if int.from_bytes(tipo, byteorder='big') == 7 :
+            print("Payload esperado de :",
+                int.from_bytes(headofPacket,byteorder='big'),"bytes")
 
-        #if int.from_bytes(tipo,byteorder='big') == 7 :
-        #    print("Payload esperado de :",
-        #            int.from_bytes(headofPacket,byteorder='big',"bytes")
-       # self.clearBuffer()
+        self.clearBuffer()
         self.threadResume()
         return(payload,tipo)
 

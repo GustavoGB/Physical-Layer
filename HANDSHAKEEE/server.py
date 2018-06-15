@@ -42,7 +42,7 @@ def main():
             rxBuffer,tipo = com.getData()
             tipo = int.from_bytes(tipo,byteorder='big')
             print("Esperando Syn 1 para estabelecer contato......")
-            tipo = (7).from_bytes(tipo,byteorder='big'
+            
             #Recepção Syn1
             if tipo == 1 :
                 ("***SYN1 ENCONTRADO***")
@@ -79,8 +79,8 @@ def main():
         # Salva o dado recebido em arquivo
         print("__________________________________________________")
         print("Salvando dados no arquivo :")
-        print("{}".format(dadoW))
-        f = open(dadoW, 'wb')
+        print("{}".format(imageW))
+        f = open(imageW, 'wb')
         f.write(rxBuffer)
 
         # Fecha arquivo de imagem
