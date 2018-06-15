@@ -67,12 +67,8 @@ def main():
             print("***ACK2 ENVIADO***")
             print("________________________________________")
             print("Conecção estabelecida")
-            print("Transmitindo .... {} bytes".format(txLen))
-            tipo = (7).to_bytes(1,byteorder='big')
-            com.sendData(txBuffer,tipo)
         
             time.sleep(3) # Continuar varrendo
-
             break
         else:
             print("***ERRO***")
@@ -89,6 +85,11 @@ def main():
     print("-------------------------")
     txLen    = len(txBuffer)
     print(txLen)
+
+    # Transmite imagem
+    print("Transmitindo .... {} bytes".format(txLen))
+    tipo = (7).to_bytes(1,byteorder='big')
+    com.sendData(txBuffer,tipo)
 
 
     #Loop fim 

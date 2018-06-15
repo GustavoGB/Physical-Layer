@@ -107,7 +107,7 @@ class RX(object):
             end = time.time()  #Tock fim
             print("%.2f" % (end-start), '/ 10 seg')
 
-            if (end - start) > 10:
+            if (end - start) > 15:
                 return ()
 
         return(self.getBuffer(tamanho)) 
