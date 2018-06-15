@@ -67,7 +67,7 @@ class TX(object):
         #Concatena o head com o tipo da msg 
         headofPacket += tipo
         #Cria Eop
-        endofPacket = (33333333).to_bytes(4, byteorder = 'big')
+        endofPacket = (11111111111).to_bytes(4, byteorder = 'big')
         #Concatena o pacote completo
         allPacket = headofPacket + data + endofPacket
         #Adicional Info
@@ -90,7 +90,8 @@ class TX(object):
         """
         
         self.transLen   = 0
-        self.buffer = self.packMessage(data,tipo)
+        #Chama o packet maker   
+        self.buffer = self.packMessage(data,tipo) 
         self.threadMutex  = True
         
 

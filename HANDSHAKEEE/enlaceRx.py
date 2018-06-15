@@ -81,11 +81,10 @@ class RX(object):
         """
         self.threadPause()
         AllPacket = self.buffer[0:nData]
-        endofPacket = self.buffer.find(b'33333333')
-        headofPacket = self.buffer[0:4] 
-        tipo = self.buffer[4:7]
+        endofPacket = self.buffer.find(b'33333333') #Tirou-se o Extract header e Eop para ficar mais simples
+        headofPacket = self.buffer[0:7] 
+        tipo = self.buffer[7:8]
         payload  = AllPacket[8:endofPacket]
-        print(AllPacket,endofPacket,headofPacket,tipo,payload)
 
         if int.from_bytes(tipo, byteorder='big') == 7 :
             print("Payload esperado de :",

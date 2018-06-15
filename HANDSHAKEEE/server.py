@@ -16,16 +16,13 @@ import time
 #   python -m serial.tools.list_ports
 
 #serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
-#serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)
-serialName = "COM4"                  # Windows(variacao de)
-                                      # Windows(variacao de
-
+#serialName = "/dev/tty.usbmodem1411" # Mac    (variacao de)                                      # Windows(variacao de
+#Inicializa Enlace, ativa a comunicação e arquivo a ser recebifo
 def main():
-
+    serialName = "COM4"                  # Windows(variacao de)
     com = enlace(serialName)
     com.enable()
     imageW = "./imgs/recebidaTeste.png"
-
     while (True):
         print("HandShake")    
 
@@ -72,7 +69,10 @@ def main():
         else:
             print("***ERRO***")
             print("***INICIANDO HS NOVAMENTE")
-            continue
+            rxBuffer,tipo = com.getData()
+            tipo = int.from_bytes(tipo,byteorder='big')
+            print("Esperando Syn 1 para estabelecer contato......")
+            
 
             #Recepção Ack2
 

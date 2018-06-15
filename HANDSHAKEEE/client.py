@@ -26,8 +26,6 @@ def main():
         com = enlace(serialName)
         com.enable()
         imageR = "./imgs/imageC.png"
-        txBuffer = open(imageR, 'rb').read()
-        print(len(txBuffer))
 
         #Tipos:
         # Syn 1  = 1
@@ -46,6 +44,13 @@ def main():
         com.sendData(data,tipo) #Enviando Syn
         print("SYNC1...ENVIADO!!")
 
+        rxBuffer,tipo = com.getData()
+        tipo = (int.from_bytes(tipo,byteorder='big'))
+        if tipo == 9:
+            print("Client recebeu o Nack, reenviando Syn1")
+            data = (8).to_bytes(1,byteorder = 'big')
+            tipo = (1).to_bytes(1,byteorder='big')
+            com.sendData(data,tipo)
         #Recebendo Ack1
         print("Esperando Ack1.....")
         rxBuffer,tipo = com.getData()
@@ -96,6 +101,7 @@ def main():
     # Carrega imagem
     print ("Carregando imagem para transmissão :")
     print (" - {}".format(imageR))
+    txBuffer = open(imageW, 'rb').read()
     print("-------------------------")
     txLen    = len(txBuffer)
     print(txLen)
