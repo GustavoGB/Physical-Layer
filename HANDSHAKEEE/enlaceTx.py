@@ -70,8 +70,15 @@ class TX(object):
         endofPacket = (33333333).to_bytes(4, byteorder = 'big')
         #Concatena o pacote completo
         allPacket = headofPacket + data + endofPacket
+        #Adicional Info
+        overHead = len(allPacket)/len(data)
         
-        return allPacket,tipo
+        #Igual RX
+        if int.from_bytes(tipo, byteorder ='big') == 7:
+            print("Payload = ", len(data))
+            print("Overhead =","%.5f" % overHead) #%f float!!!
+
+        return allPacket
 
     def sendBuffer(self, data,tipo):
         """ Write a new data to the transmission buffer.
@@ -81,9 +88,9 @@ class TX(object):
         of transmission, this erase all content of the buffer
         in order to save the new value.
         """
-        data = self.packMessage(data,tipo)
+        
         self.transLen   = 0
-        self.buffer = data
+        self.buffer = self.packMessage(data,tipo)
         self.threadMutex  = True
         
 

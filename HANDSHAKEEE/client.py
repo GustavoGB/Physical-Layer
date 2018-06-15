@@ -8,8 +8,6 @@
 #  Aplicação
 ####################################################
 
-print("comecou")
-
 from enlace import *
 import time
 
@@ -20,9 +18,7 @@ import time
 
 #serialName = "/dev/ttyACM0"           # Ubuntu (variacao de)
 #serialName = "/dev/tty.usbmodem1451" # Mac    (variacao de)
-serialName = "COM1"                  # Windows(variacao de)
-
-print("abriu com")
+serialName = "COM3"                  # Windows(variacao de)
 
 def main():
    
@@ -31,7 +27,7 @@ def main():
         com.enable()
         imageR = "./imgs/imageC.png"
         txBuffer = open(imageR, 'rb').read()
-        data = txBuffer
+        print(len(txBuffer))
 
         #Tipos:
         # Syn 1  = 1
@@ -49,13 +45,25 @@ def main():
         tipo = (1).to_bytes(1,byteorder='big')
         com.sendData(data,tipo) #Enviando Syn
         print("SYNC1...ENVIADO!!")
-        print(data,tipo)
+
         #Recebendo Ack1
         print("Esperando Ack1.....")
         rxBuffer,tipo = com.getData()
         tipo = (int.from_bytes(tipo, byteorder='big'))
-        print("ACK1...RECEBIDO COM SUCESSO")
-        
+
+        if tipo == 4:
+            print("ACK1...RECEBIDO COM SUCESSO")    
+            time.sleep(2)
+        if tipo == 9:
+            print("Recebi o Nack, reevinado o Syn1...")   
+            data = (8).to_bytes(1,byteorder = 'big')
+            tipo = (1).to_bytes(1,byteorder='big')
+            com.sendData(data,tipo) #Enviando Syn
+            time.sleep(2)
+        else :
+            print("***ERRO***")
+            print("***INICIANDO HS NOVAMENTE")
+            continue
         #Recebendo Syn2
         print("Esperando Syn2....") 
         rxBuffer, tipo = com.getData()
@@ -72,76 +80,46 @@ def main():
         
             time.sleep(3) # Continuar varrendo
             break
+        if tipo == 9 :
+            print("Recebi o Nack, vou reenviar o Ack2...")
+            data = (8).to_bytes(1,byteorder='big')
+            tipo = (4).to_bytes(1,byteorder='big')
+            com.sendData(data,tipo)
         else:
-            if tipo == 9 :
-                print("Recebi o Nack, vou reenviar o Ack2...")
-                data = (8).to_bytes(1,byteorder='big')
-                tipo = (9).to_bytes(1,byteorder='big')
-                com.sendData(data,tipo)
-                else:
-                    print("***ERRO***")
-                    print("***INICIANDO HS NOVAMENTE")
-                    continue
+            print("***ERRO***")
+            print("***INICIANDO HS NOVAMENTE")
+            continue
                 
-            
-        
-
-        time.sleep(0.5)
-        tipo = 0 #Só uma variável para setar o estado e aplicar a varredura
-        while tipo == 0: # Reconhecendo o Syn   
-            rxBuffer,tipo,tamanho = com.getData()
-            time.sleep(0.5)
-            if tipo == ack:  # Se o tipo for ack
-                print("Client recebeu o ack, esperando syn")           
-            if tipo == nack:
-                print("Reenviando pacote ack...")
-                com.sendData(dados,ack)
-                tipo = 0 # Reenvia o sinal ack
-        while tipo == 0: # Esperando Ack final   
-            rxBuffer,tipo,tamanho == com.getData()
-            if tipo == syn:  # Se o rxBuffer estiver com o Syn!
-                print("Client recebeu o syn, vou te mandar um ack")
-                com.sendData(dados,ack)
-            else:
-                com.sendData(dados,nack)
-                if tipo == nack:
-                    com.sendData(dados,syn)
-            time.sleep(1)
-
-        # Log
-        print("-------------------------")
-        print("Comunicação inicializada")
-        print("  porta : {}".format(com.fisica.name))
-        print("-------------------------")
+             
 
             
-        # Carrega imagem
-        print ("Carregando imagem para transmissão :")
-        print (" - {}".format(imageR))
-        print("-------------------------")
-        txLen    = len(txBuffer)
-        print(txLen)
+    # Carrega imagem
+    print ("Carregando imagem para transmissão :")
+    print (" - {}".format(imageR))
+    print("-------------------------")
+    txLen    = len(txBuffer)
+    print(txLen)
 
-        # Transmite imagem
-        print("Transmitindo .... {} bytes".format(txLen))
-        tipo = (7).to_bytes(1,byteorder='big')
-        com.sendData(data,tipo)
+    # Transmite imagem
+    print("Transmitindo .... {} bytes".format(txLen))
+    tipo = (7).to_bytes(1,byteorder='big')
+    com.sendData(txBuffer,tipo)
 
 
-        #Loop fim 
-        while(com.tx.getIsBussy):
-            pass
+    #Loop fim 
+    while(com.tx.getIsBussy):
+        pass
 
-        # Faz a recepção dos dados
-        print ("Recebendo dados .... ")
-        
-        # Encerra comunicação
-        print("-------------------------")
-        print("Comunicação encerrada")
-        print("-------------------------")
-        com.disable()
+    # Faz a recepção dos dados
+    print ("Recebendo dados .... ")
+    
+    # Encerra comunicação
+    print("-------------------------")
+    print("Comunicação encerrada")
+    print("-------------------------")
+    com.disable()
 
-        #so roda o main quando for executado do terminal ... se for chamado dentro de outro modulo nao roda
+    #so roda o main quando for executado do terminal ... se for chamado dentro de outro modulo nao roda
 if __name__ == "__main__":
     main()
 
