@@ -55,15 +55,16 @@ class enlace(object):
         """
 
         self.tx.sendBuffer(data,tipo)
+       
 
     def getData(self):
         """ Get n data over the enlace interface
         Return the byte array and the size of the buffer
         """
 
-        payload,tipo = self.rx.getNData()
+        data,tipo = self.rx.getNData()
 
-        return(payload, tipo,len(payload))
+        return(data, tipo)
 
         
     

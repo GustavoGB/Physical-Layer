@@ -61,7 +61,7 @@ class TX(object):
         """
         self.threadMutex = True
 
-    def sendBuffer(self, data):
+    def sendBuffer(self, data,tipo):
         """ Write a new data to the transmission buffer.
             This function is non blocked.
 
@@ -69,7 +69,7 @@ class TX(object):
         of transmission, this erase all content of the buffer
         in order to save the new value.
         """
-        data = self.packMessage(data)
+        data = self.packMessage(data,tipo)
         self.transLen   = 0
         self.buffer = data
         self.threadMutex  = True
@@ -90,15 +90,17 @@ class TX(object):
        
         return(self.threadMutex)
         
-    def packMessage(self,data):
+    def packMessage(self,data,tipo):
         cargaUtil = len(data)
         #constroi EOP
-        data += bytes([255,254,253,252])
+        dataEop = data + bytes([255,254,253,252])
         
-        cargaUtilByte = (cargaUtil).to_bytes(8, byteorder='big') #0xMS ... LS 
+        
+        head = (cargaUtil).to_bytes(4, byteorder='big') + tipo  #0xMS ... LS 
         #verificacao = int.from_bytes(cargaUtilByte, byteorder='big')
-    
-        data =  cargaUtilByte + data
+
+        
+        data =  head + dataEop
                      
        
         return data
