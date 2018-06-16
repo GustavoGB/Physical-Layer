@@ -61,16 +61,19 @@ class TX(object):
         """
         self.threadMutex = True
 
-    def packMessage(self,data,tipo):
-        #Cria Head
-        headofPacket = (len(data)).to_bytes(7, byteorder = 'big')
-        #Concatena o head com o tipo da msg 
-        headofPacket += tipo
-        #Cria Eop
-        endofPacket = (111111111111).to_bytes(5, byteorder = 'big')
-        print(endofPacket)
-        #Concatena o pacote completo
-        allPacket = headofPacket + data + endofPacket
+    def packMessage(self,data,tipo,pacoteAtual,pacoteTotal):
+        
+        headofPacket  = (len(data)).to_bytes(7, byteorder = 'big')#Cria Head
+        headofPacket += tipo #Concatena o head com o tipo da msg
+        headofPacket += pacoteAtual #FRAGMENTACAO--- Criar o pacoteAtual 
+        headofPacket += pacoteTotal #FRAGMENTACAO--- Criar o pacoteTotal 
+        endofPacket   = (111111111111).to_bytes(5, byteorder = 'big')#Cria Eop
+        allPacket     = headofPacket + data + endofPacket #Concatena o pacote completo
+
+        #Int Bytes Tipo, pacoteAtual e pacoteTotal
+        tipo        = int.from_bytes(tipo,byteorder='big')
+        pacoteAtual = int.from_bytes(pacoteAtual,byteorder='big')
+        pacoteTotal = int.from_bytes(pacoteTotal,byteorder='big')
         
         #Igual RX
         if int.from_bytes(tipo, byteorder ='big') == 7:
