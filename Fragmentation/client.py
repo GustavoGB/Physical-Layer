@@ -81,26 +81,36 @@ def main():
     # Carrega imagem
     print ("Carregando imagem para transmissão :")
     print (" - {}".format(imageR))
-    txBuffer = open("./imgs/main-qimg-2d5b151a8b81bb7ad6a2d43be3268944.png", 'rb').read()
+    foto = open("./imgs/main-qimg-2d5b151a8b81bb7ad6a2d43be3268944.png", 'rb').read()
     print("-------------------------")
-    txSize    = len(txBuffer)
+    txSize    = len(foto) #Foto = txBuffer
     print(txSize)
 
     # Transmite imagem
     print("Transmitindo .... {} bytes".format(txSize))
     tipo = (7).to_bytes(1,byteorder='big')
-    
 
     #Criar função que divide o payload
-    def dividePayload(txSize,tipo,pacotesTotal,pacotesAtual,txBuffer):
-        if txSize > 1000:
-            divisaoPacotes = (txSize/1000) + 1 #Quantos pacotes com o maximo de 1000bytes
-            pacotesAtual = (divisaoPacotes).to_bytes(1,byteorder='big')
-            print("O pacote será divido em {}".format(divisaoPacotes)) 
-            # Concatenar e percorrer o indice para dizer qual é o pacoteAtual
-            indice         = 0
-            pacoteCompleto = b""
-            for indice  
+    if txSize > 1000:
+        divisaoPacotes = (txSize/1000) + 1 #Quantos pacotes com o maximo de 1000bytes
+        pacotesAtual   = (divisaoPacotes).to_bytes(1,byteorder='big')
+        print("O pacote será divido em {}".format(divisaoPacotes)) 
+        # Concatenar e percorrer o indice para dizer qual é o pacoteAtual
+        indice         =  0
+        pacoteCompleto =  b""
+        while indice < divisaoPacotes:
+            txBuffer        = foto[indice*1000 : (indice*1000 + 1000)]
+            pacotesAtual    = (indice).to_bytes(1,byteorder='big')
+            pacoteCompleto += com.constructPack(txBuffer,tipo,pacotesAtual,pacotesTotal)  
+            indice          = indice + 1 
+            print(pacotesAtual)
+            print(pacotesCompleto)
+        com.sendBufferAfterFragmentation(pacoteCompleto,tipo,pacotesAtual,pacotesTotal)
+else:
+    divisaoPacotes     =   1
+    pacotesTotal       = (divisaoPacotes).to_bytes(1,byteorder='big')
+    print("A divisão de pacotes não ocorreu")
+    com.sendData(foto,tipo,pacotesAtual,pacotesTotal)
 
      #Loop fim 
     while(com.tx.getIsBussy):
