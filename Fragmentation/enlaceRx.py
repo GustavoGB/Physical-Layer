@@ -103,8 +103,9 @@ class RX(object):
                 allPayload += allPacket[((1015*limite)+10) : ((1015*limite)+1010)]
                 limite = limite + 1 
         if tipo == 7 :
-            print(" O pacote sera dividido em:",pacotesTotal)
- 
+            #PacotesTotal = 62
+            print(" O pacote sera dividido em:",62)
+
         self.clearBuffer()
         self.threadResume()
         return(allPayload,tipo)
