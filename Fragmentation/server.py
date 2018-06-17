@@ -39,7 +39,6 @@ def main():
 
         print("***RECEBENDO.....***")
         rxBuffer,tipo = com.getData()
-        tipo = int.from_bytes(tipo,byteorder='big')
         print("Esperando Syn 1 para estabelecer contato......")
       
         #Recepção Syn1
@@ -65,7 +64,6 @@ def main():
         print("***Esperando ACK2***")
 
         rxBuffer, tipo = com.getData()
-        tipo = (int.from_bytes(tipo,byteorder='big'))
 
         if tipo == 5:
             print("***ACK2 RECEBIDO***")

@@ -86,7 +86,7 @@ class RX(object):
         tipo         =   self.buffer[7:8] # Pega o tipo do pacote
         pacotesTotal =   self.buffer[9:10] # Pega qual é o todos de pacotrs
         
-        #Printa o Head para verificar 
+        #Printa o Head para verificar  §
         print(headofPacket)
         #Criar condição para saber se haverá a junção de pacotes--Igual Tx
         pacotesTotal = int.from_bytes(pacotesTotal,byteorder='big')

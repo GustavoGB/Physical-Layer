@@ -53,13 +53,11 @@ def main():
         #Recebendo Ack1
         print("Esperando Ack1.....")
         rxBuffer,tipo = com.getData()
-        tipo = (int.from_bytes(tipo, byteorder='big'))
         print("Recebido Ack1")
 
         #Recebendo Syn2
         print("Esperando Syn2....") 
         rxBuffer, tipo = com.getData()
-        tipo = (int.from_bytes(tipo, byteorder='big'))
         if tipo == 3:
             print("***SYN2 RECEBIDO***...")
             print("***ACK2 SENDO ENVIADO PARA ESTABELECER CONECÇÃO")
@@ -95,7 +93,7 @@ def main():
 
     #Criar função que divide o payload
     if txSize > 1000:
-        divisaoPacotes = (txSize/1000) + 1 #Quantos pacotes com o maximo de 1000bytes
+        divisaoPacotes = (txSize//1000) + 1 #Quantos pacotes com o maximo de 1000bytes
         pacotesAtual   = (divisaoPacotes).to_bytes(1,byteorder='big')
         print("O pacote será divido em {}".format(divisaoPacotes)) 
         # Concatenar e percorrer o indice para dizer qual é o pacoteAtual
@@ -106,8 +104,6 @@ def main():
             pacotesAtual    = (indice).to_bytes(1,byteorder='big')
             pacoteCompleto += com.constructPack(txBuffer,tipo,pacotesAtual,pacotesTotal)  
             indice          = indice + 1 
-            print(pacotesAtual)
-            print(pacoteCompleto)
         com.sendBufferAfterFragmentation(pacoteCompleto,tipo,pacotesAtual,pacotesTotal)
     else:
         divisaoPacotes     =   1
