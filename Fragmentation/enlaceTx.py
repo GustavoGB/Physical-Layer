@@ -97,8 +97,8 @@ class TX(object):
         self.buffer = self.packMessage(data,tipo,pacotesAtual,pacotesTotal) 
         self.threadMutex  = True
         
-       def sendBufferAfterFragmentation(self, data):
-           #Esta função é chamada após o client rearranjar os pacotes
+    def sendBufferAfterFragmentation(self, data,tipo,pacotesAtual,pacotesTotal):
+        #Esta função é chamada após o client rearranjar os pacotes
         self.transLen      =  0   
         self.buffer        =  data
         self.threadMutex   =  True

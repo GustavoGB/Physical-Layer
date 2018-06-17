@@ -46,16 +46,17 @@ class enlace(object):
         self.tx.threadKill()
         time.sleep(1)
         self.fisica.close()
-
-    ################################
-    # Application  interface       #
-    ################################
-    def sendData(self, data,tipo):
+   
+    def sendData(self, data,tipo,pacotesAtual,pacotesTotal):
         """ Send data over the enlace interface
         """
+        self.tx.sendBuffer(data,tipo,pacotesAtual,pacotesTotal)
+        
+    def sendBufferAfterFragmentation(self,data,tipo,pacotesAtual,pacotesTotal):
+        self.tx.sendBufferAfterFragmentation(data,tipo,pacotesAtual,pacotesTotal)
 
-        self.tx.sendBuffer(data,tipo)
-       
+    def constructPack(self,data,tipo,pacotesAtual,pacotesTotal):
+        return self.tx.packMessage(data,tipo,pacotesAtual,pacotesTotal)
 
     def getData(self):
         """ Get n data over the enlace interface
