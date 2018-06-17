@@ -74,26 +74,41 @@ class RX(object):
         """ Return the total number of bytes in the reception buffer
         """
         return(len(self.buffer))
-
+    
 
     def getBuffer(self, nData):
         """ Remove n data from buffer
         """
         self.threadPause()
-        allPacket    =   self.buffer[0:nData]
-        endofPacket  =   self.buffer.find(b'111111111111') #Tirou-se o Extract header e Eop para ficar mais simples
-        headofPacket =   self.buffer[0:7]
-        tipo         =   self.buffer[7:8]
-        payload      =   allPacket[8:endofPacket]
+        allPacket    =   self.buffer[0:nData] #Pega todo o pacote
+        endofPacket  =   self.buffer.find(b'111111111111') #Equivalente ao localiza EOP
+        headofPacket =   self.buffer[0:7] # Equivalente ao extract Header
+        tipo         =   self.buffer[7:8] # Pega o tipo do pacote
+        pacotesTotal =   self.buffer[9:10] # Pega qual é o todos de pacotrs
+        
+        #Printa o Head para verificar 
+        print(headofPacket)
+        #Criar condição para saber se haverá a junção de pacotes--Igual Tx
+        pacotesTotal = int.from_bytes(pacotesTotal,byteorder='big')
+        tipo = int.from_bytes(tipo,byteorder='big')
 
-        if int.from_bytes(tipo, byteorder='big') == 7 :
-            print("Payload esperado de :",
-                int.from_bytes(headofPacket,byteorder='big'),"bytes")
+        # O valor do payload agora será "anulado",isto é, para conseguirmos realizar a junção dos pacotes
+        allPayload = b""
 
+        if pacotesTotal == 1 :
+            allPayload = allPacket[10:endofPacket]  
+        else:
+            limite = 0 
+            for limite in pacotesTotal:
+                allPayload += allPacket[((1015*limite)+10) : ((1015*limite)+1010)]
+                limite = limite + 1 
+        if tipo == 7 :
+            print(" O pacote sera dividido em:",pacotesTotal)
+ 
         self.clearBuffer()
         self.threadResume()
-        return(payload,tipo)
-
+        return(allPayload,tipo)
+    
     def getNData(self):
         self.clearBuffer()
         tamanho = 0

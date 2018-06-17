@@ -83,7 +83,7 @@ class TX(object):
 
         return allPacket
 
-    def sendBuffer(self, data,tipo):
+    def sendBuffer(self, data,tipo,pacotesAtual,pacotesTotal):
         """ Write a new data to the transmission buffer.
             This function is non blocked.
 
@@ -94,9 +94,14 @@ class TX(object):
         
         self.transLen   = 0
         #Chama o packet maker   
-        self.buffer = self.packMessage(data,tipo,pacoteAtual,pacoteTotal) 
+        self.buffer = self.packMessage(data,tipo,pacotesAtual,pacotesTotal) 
         self.threadMutex  = True
         
+       def sendBufferAfterFragmentation(self, data):
+           #Esta função é chamada após o client rearranjar os pacotes
+        self.transLen      =  0   
+        self.buffer        =  data
+        self.threadMutex   =  True
 
     def getBufferLen(self):
         """ Return the total size of bytes in the TX buffer

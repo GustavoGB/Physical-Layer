@@ -89,9 +89,11 @@ def main():
     # Transmite imagem
     print("Transmitindo .... {} bytes".format(txLen))
     tipo = (7).to_bytes(1,byteorder='big')
-    com.sendData(txBuffer,tipo)
+    
 
-
+    #Criar função que divide o payload
+    def dividePayload(txLen,tipo,pacotesTotal,pacotesAtual):
+        
     #Loop fim 
     while(com.tx.getIsBussy):
         pass
