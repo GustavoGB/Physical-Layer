@@ -83,18 +83,26 @@ def main():
     print (" - {}".format(imageR))
     txBuffer = open("./imgs/main-qimg-2d5b151a8b81bb7ad6a2d43be3268944.png", 'rb').read()
     print("-------------------------")
-    txLen    = len(txBuffer)
-    print(txLen)
+    txSize    = len(txBuffer)
+    print(txSize)
 
     # Transmite imagem
-    print("Transmitindo .... {} bytes".format(txLen))
+    print("Transmitindo .... {} bytes".format(txSize))
     tipo = (7).to_bytes(1,byteorder='big')
     
 
     #Criar função que divide o payload
-    def dividePayload(txLen,tipo,pacotesTotal,pacotesAtual):
-        
-    #Loop fim 
+    def dividePayload(txSize,tipo,pacotesTotal,pacotesAtual,txBuffer):
+        if txSize > 1000:
+            divisaoPacotes = (txSize/1000) + 1 #Quantos pacotes com o maximo de 1000bytes
+            pacotesAtual = (divisaoPacotes).to_bytes(1,byteorder='big')
+            print("O pacote será divido em {}".format(divisaoPacotes)) 
+            # Concatenar e percorrer o indice para dizer qual é o pacoteAtual
+            indice         = 0
+            pacoteCompleto = b""
+            for indice  
+
+     #Loop fim 
     while(com.tx.getIsBussy):
         pass
     
