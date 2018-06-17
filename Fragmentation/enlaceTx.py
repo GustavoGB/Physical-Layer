@@ -74,10 +74,12 @@ class TX(object):
         tipo        = int.from_bytes(tipo,byteorder='big')
         pacoteAtual = int.from_bytes(pacoteAtual,byteorder='big')
         pacoteTotal = int.from_bytes(pacoteTotal,byteorder='big')
-        
+        #OverHead
+        overHead    =  pacoteTotal*len(allPacket)/len(data)
         #Igual RX
-        if int.from_bytes(tipo, byteorder ='big') == 7:
-            print("Payload = ", len(data))
+        if (tipo == 7) and (pacoteAtual == pacoteTotal-1):
+            print("Payload   = ", len(data))
+            print("OverHead  = ","%.5f" % overHead)
 
         return allPacket
 
@@ -92,7 +94,7 @@ class TX(object):
         
         self.transLen   = 0
         #Chama o packet maker   
-        self.buffer = self.packMessage(data,tipo) 
+        self.buffer = self.packMessage(data,tipo,pacoteAtual,pacoteTotal) 
         self.threadMutex  = True
         
 
