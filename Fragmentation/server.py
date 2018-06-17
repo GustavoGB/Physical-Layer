@@ -20,18 +20,23 @@ import time
 serialName = "COM4" 
 #Inicializa Enlace, ativa a comunicação e arquivo a ser recebifo
 def main():
-                     # Windows(variacao de)
     com = enlace(serialName)
     com.enable()
     imageW = "./imgs/recebida/recebidaTeste.png"
+
     while (True):
-        print("HandShake")    
+        print("HandShake working with fragmentation")    
         #Tipos:
         # Syn 1  = 1
         # Syn 2  = 3
         # Ack 1  = 4 
         # Ack 2  = 5 
         # Dados  = 7 
+        #pacotesAtual = 1 (1byte = 1, 00000001)
+        #pacotesTotal = 1 (1byte = 1, 00000001)
+        pacotesAtual =(1).to_bytes(1,byteorder='big')
+        pacotesTotal =(1).to_bytes(1,byteorder='big')
+
         print("***RECEBENDO.....***")
         rxBuffer,tipo = com.getData()
         tipo = int.from_bytes(tipo,byteorder='big')
@@ -44,13 +49,13 @@ def main():
             data = (8).to_bytes(1,byteorder='big')
             tipo = (4).to_bytes(1,byteorder='big')
             #Enviar Ack1!!
-            com.sendData(data,tipo)
+            com.sendData(data,tipo,pacotesAtual,pacotesTotal)
             print("...........Ack1 enviado")
             time.sleep(2.0)
             #Enviando Syn2!!!
             data = (8).to_bytes(1,byteorder='big')
             tipo = (3).to_bytes(1,byteorder='big')
-            com.sendData(data,tipo)
+            com.sendData(data,tipo,pacotesAtual,pacotesTotal)
             print("...enviando Syn2...")
         else:
             print("***ERRO***")

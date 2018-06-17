@@ -37,14 +37,17 @@ def main():
         # Ack 1  = 4 
         # Ack 2  = 5 
         # Dados  = 7 
-        # Bugs   = 9 
-        #
-        print("HandShake") 
+        #pacotesAtual = 1 (1byte = 1, 00000001)
+        #pacotesTotal = 1 (1byte = 1, 00000001)
+        pacotesAtual =(1).to_bytes(1,byteorder='big')
+        pacotesTotal =(1).to_bytes(1,byteorder='big')
+
+        print("HandShake working with fragmentation ") 
         #Enviando Syn1
         print("Criando sinal Syn1")
         data = (8).to_bytes(1,byteorder = 'big')
         tipo = (1).to_bytes(1,byteorder = 'big')
-        com.sendData(data,tipo) #Enviando Syn
+        com.sendData(data,tipo,pacotesAtual,pacotesTotal) #Enviando Syn
         print("SYNC1...ENVIADO!!")
 
         #Recebendo Ack1
@@ -63,7 +66,7 @@ def main():
             #Criando ACK2
             data = (8).to_bytes(1,byteorder='big')
             tipo = (5).to_bytes(1,byteorder='big')
-            com.sendData(data,tipo)
+            com.sendData(data,tipo,pacotesAtual,pacotesTotal)
             print("***ACK2 ENVIADO***")
             print("________________________________________")
             print("Conecção estabelecida")
@@ -104,13 +107,13 @@ def main():
             pacoteCompleto += com.constructPack(txBuffer,tipo,pacotesAtual,pacotesTotal)  
             indice          = indice + 1 
             print(pacotesAtual)
-            print(pacotesCompleto)
+            print(pacoteCompleto)
         com.sendBufferAfterFragmentation(pacoteCompleto,tipo,pacotesAtual,pacotesTotal)
-else:
-    divisaoPacotes     =   1
-    pacotesTotal       = (divisaoPacotes).to_bytes(1,byteorder='big')
-    print("A divisão de pacotes não ocorreu")
-    com.sendData(foto,tipo,pacotesAtual,pacotesTotal)
+    else:
+        divisaoPacotes     =   1
+        pacotesTotal       = (divisaoPacotes).to_bytes(1,byteorder='big')
+        print("A divisão de pacotes não ocorreu")
+        com.sendData(foto,tipo,pacotesAtual,pacotesTotal)
 
      #Loop fim 
     while(com.tx.getIsBussy):
